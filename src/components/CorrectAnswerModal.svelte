@@ -1,5 +1,6 @@
 <script>
   import {gameState} from "$lib/stores";
+  import { Check, Play } from "lucide-svelte";
 
   let {isOpen, player, word, nextPlayer, close} = $props();
   let exit = $state(false);
@@ -19,7 +20,7 @@
         <div
           class="bg-green-500 w-10 h-10 flex justify-center items-center border-2 border-black rounded-full absolute top-0 -translate-y-1/2 -left-5 text-xl"
         >
-          <i class="fa-solid fa-check text-white"></i>
+        <Check color="#ffffff" />
         </div>
         <h2 class="text-center text-2xl lg:text-6xl font-semibold">ÕIGE!</h2>
       </div>
@@ -44,7 +45,7 @@
             }, 1200);
           }}
           class="bg-yellow-300 hover:bg-yellow-200 font-semibold poppins px-4 py-2 rounded-lg border-2 border-black lg:text-4xl"
-          >MÄNGI <i class="fa-solid fa-play"></i></button
+          >MÄNGI <Play /></button
         >
       </div>
     </div>

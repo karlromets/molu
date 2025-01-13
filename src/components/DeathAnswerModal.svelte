@@ -2,6 +2,7 @@
   import {slide} from "svelte/transition";
   import {quintOut} from "svelte/easing";
   import {gameState} from "$lib/stores";
+  import { X } from "lucide-svelte";
 
   let {isOpen, player, word, nextPlayer, close} = $props();
   let exit = $state(false);
@@ -28,7 +29,7 @@
         <div
           class="bg-red-500 w-10 h-10 flex justify-center items-center border-2 border-black rounded-full absolute top-0 -translate-y-1/2 -left-5 text-xl"
         >
-          <i class="fa-solid fa-xmark text-white"></i>
+        <X color="#ffffff"/>
         </div>
         <h2 class="text-center text-2xl font-semibold lg:text-6xl">VALE!</h2>
       </div>
@@ -56,7 +57,7 @@
             }, 1200);
           }}
           class="bg-yellow-300 font-semibold poppins px-4 py-2 rounded-lg border-2 border-black disabled:opacity-50 lg:text-4xl"
-          >MÄNGI <i class="fa-solid fa-play"></i></button
+          >MÄNGI <Play /></button
         >
       </div>
     </div>

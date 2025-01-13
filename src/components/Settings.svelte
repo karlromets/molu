@@ -3,6 +3,7 @@
   import {onMount} from "svelte";
   import logopadding from "../assets/logopadding.png";
   import {toast} from "@zerodevx/svelte-toast";
+  import { Clock, Heart, Play, Settings, X } from "lucide-svelte";
 
   onMount(() => {
     const settingsString = localStorage.getItem("settings");
@@ -68,8 +69,8 @@
     <div
       class="bg-yellow-300 border-2 border-black rounded-full px-6 py-3 mx-2 w-fit"
     >
-      <h1 class="text-2xl sm:text-3xl font-semibold text-black">
-        MÄNGU SÄTTED <i class="fa-solid fa-gear"></i>
+      <h1 class="text-2xl sm:text-3xl font-semibold text-black flex items-center gap-1">
+        MÄNGU SÄTTED <Settings class="w-6 h-6 sm:w-7 sm:h-7"/>
       </h1>
     </div>
   </section>
@@ -127,7 +128,7 @@
               }}
               aria-label="Save Settings"
               class="hover:cursor-pointer hover:rotate-90 active:scale-50 duration-200"
-              ><i class="fa-solid fa-xmark text-2xl mb-[0.125rem]"></i></button
+              ><!-- <i class="fa-solid fa-xmark text-2xl mb-[0.125rem]"></i> --><X /></button
             >
           </li>
         {/each}
@@ -138,8 +139,8 @@
   <section class="w-full mt-2">
     <div class="bg-yellow-300 border-2 border-black rounded-lg mx-2 p-2">
       <div class="flex justify-between items-center">
-        <h1 class="font-semibold text-xl">
-          Arvamise aeg <i class="fa-solid fa-clock"></i>
+        <h1 class="font-semibold text-xl flex items-center gap-1">
+          Arvamise aeg <Clock />
         </h1>
         <span class="poppins font-semibold text-xl">{$gameState.settings.time}s</span>
       </div>
@@ -160,8 +161,8 @@
     </div>
     <div class="bg-yellow-300 border-2 border-black rounded-lg mx-2 mt-2 p-2">
       <div class="flex justify-between items-center">
-        <h1 class="font-semibold text-xl">
-          Elud <i class="fa-solid fa-heart text-red-600"></i>
+        <h1 class="font-semibold text-xl  flex items-center gap-1">
+          Elud <Heart color="#dc2626" class="fill-[#dc2626]"/>
         </h1>
         <span class="poppins font-semibold text-xl">{$gameState.settings.lives}</span>
       </div>
@@ -297,7 +298,7 @@
                     }}
                     aria-label="Save Settings"
                     class="bg-yellow-300 border-2 rounded-tl-none rounded-bl-none border-black rounded-lg poppins font-semibold hover:bg-yellow-100 duration-200 active:bg-yellow-300 w-12"
-                    ><i class="fa-solid fa-xmark text-2xl"></i></button
+                    ><X/></button
                   >
                 </div>
               </li>
@@ -313,9 +314,9 @@
       onclick={() => {
         validateSettings($gameState.settings);
       }}
-      class="text-2xl sm:text-3xl font-semibold text-black text-center cursor-pointer bg-yellow-300 border-black border-2 rounded-full px-6 py-3 hover:bg-yellow-200 active:translate-y-1 duration-200"
+      class="text-2xl sm:text-3xl font-semibold text-black text-center cursor-pointer bg-yellow-300 border-black border-2 rounded-full px-6 py-3 hover:bg-yellow-200 active:translate-y-1 duration-200 flex items-center gap-1"
     >
-      START <i class="fa-solid fa-play"></i>
+      START <Play class="w-6 h-6 sm:w-7 sm:h-7"/>
     </button>
   </section>
 </div>

@@ -24,7 +24,7 @@
           <img src={heart} class="h-4 w-4 lg:h-5 lg:w-5" alt="Heart" />
         {/each}
       {:else if lives < 1}
-        <i class="fa-solid fa-skull-crossbones text-black"></i>
+      <Skull color="#000000"/>
       {:else}
         Error
       {/if}

@@ -1,5 +1,6 @@
 <script>
-  import logo from "../assets/logo.svg";
+  import { ArrowDown, ArrowUp, BookOpen, Crosshair, Lightbulb } from "lucide-svelte";
+import logo from "../assets/logo.svg";
 
   let y = $state(0);
   let innerWidth = $state(0);
@@ -21,7 +22,7 @@
     class="hidden sm:grid ml-auto rounded-full bg-yellow-300 text-black px-3 sm:px-4 hover:bg-yellow-400 outline cursor-pointer aspect-square place-items-center"
     aria-label="Back to Top"
   >
-    <i class="fa-solid fa-arrow-up"></i>
+    <ArrowUp strokeWidth={3} />
   </button>
 </div>
 <main class="bg-blueToBeige">
@@ -41,9 +42,9 @@
       >
       <a
         href="#juhend"
-        class="border-4 border-solid border-black rounded-full bg-neutral-300 hover:scale-125 active:rotate-12 duration-200 font-semibold poppins text-3xl sm:text-4xl md:text-5xl lg:text-6xl px-6 py-3 w-full"
-        >JUHEND <i class="fa-solid fa-arrow-down" style="color: #000000;"
-        ></i></a
+        class="border-4 border-solid border-black rounded-full bg-neutral-300 hover:scale-125 active:rotate-12 duration-200 font-semibold poppins text-3xl sm:text-4xl md:text-5xl lg:text-6xl px-6 py-3 w-full flex items-center gap-1"
+        >JUHEND <ArrowDown class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14"  color="#000000"/>
+        </a
       >
     </div>
   </section>
@@ -52,8 +53,8 @@
     class="w-full min-h-screen relative grid place-items-center gap-8 sm:gap-0 p-2 pt-12"
   >
     <div class="mx-auto md:w-2/3 lg:w-1/2 text-[#100e08]">
-      <h1 class="text-2xl font-semibold">
-        EESMÄRK <i class="fa-solid fa-crosshairs text-red-600"></i>
+      <h1 class="text-2xl font-semibold flex items-center gap-1">
+        EESMÄRK <Crosshair size={24} color="#dc2626" />
       </h1>
       <hr class="border-black border-2" />
 
@@ -63,8 +64,8 @@
       </p>
     </div>
     <div class="mx-auto md:w-2/3 lg:w-1/2 text-[#100e08]">
-      <h1 class="text-2xl font-semibold">
-        MÄNGU KÄIK <i class="fa-solid fa-book"></i>
+      <h1 class="text-2xl font-semibold flex items-center gap-1">
+        MÄNGU KÄIK <BookOpen />
       </h1>
       <hr class="border-black border-2" />
       <ul
@@ -94,8 +95,8 @@
       </ul>
     </div>
     <div class="mx-auto md:w-2/3 lg:w-1/2 text-[#100e08]">
-      <h1 class="text-2xl font-semibold">
-        NÄPUNÄITED <i class="fa-regular fa-lightbulb"></i>
+      <h1 class="text-2xl font-semibold flex items-center gap-1">
+        NÄPUNÄITED <Lightbulb />
       </h1>
       <hr class="border-black border-2" />
 

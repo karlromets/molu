@@ -2,6 +2,7 @@
   import {slide} from "svelte/transition";
   import {quintOut} from "svelte/easing";
   import {gameState} from "$lib/stores";
+  import { House, Medal } from "lucide-svelte";
 
   let {isOpen} = $props();
   let exit = $state(false);
@@ -26,7 +27,7 @@
         <div
           class="bg-yellow-300 w-10 h-10 flex justify-center items-center border-2 border-black rounded-full absolute top-0 -translate-y-1/2 -left-5 text-xl"
         >
-          <i class="fa-solid fa-medal text-black"></i>
+        <Medal color="000000"/>
         </div>
         <h2 class="text-center text-2xl font-semibold lg:text-6xl">ÕNNITLUSED!</h2>
         <h2 class="text-center text-xl lg:text-4xl">
@@ -46,7 +47,7 @@
           }}
           aria-label="Back to Start"
           class="bg-yellow-300 font-semibold poppins px-4 py-2 rounded-lg border-2 border-black disabled:opacity-50 hover:bg-yellow-200 lg:text-4xl"
-          ><i class="fa-solid fa-house"></i></button
+          ><House /></button
         >
       </div>
     </div>
