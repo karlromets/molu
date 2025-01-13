@@ -1,11 +1,8 @@
 <script>
-  import {closeModal} from "svelte-modals";
-  import {gameState, gamePlayers} from "$lib/stores";
+  import {gameState} from "$lib/stores";
 
-  export let isOpen;
-  export let player, word, nextPlayer;
-
-  let exit = false;
+  let {isOpen, player, word, nextPlayer, close} = $props();
+  let exit = $state(false);
 </script>
 
 {#if isOpen}
@@ -29,7 +26,7 @@
       <div class="p-4">
         <ul class="list-disc list-inside text-sm sm:text-base lg:text-4xl">
           <li>
-            {$gamePlayers.players[player].name} arvas sõna <b>{word}</b> õigesti!
+            {$gameState.gamePlayers.players[player].name} arvas sõna <b>{word}</b> õigesti!
           </li>
           <li>Järgmine mängija on <b>{nextPlayer}</b>!</li>
         </ul>
@@ -38,11 +35,11 @@
         class="mt-8 flex justify-end bg-neutral-200 p-4 border-t-2 border-black rounded-b-md"
       >
         <button
-          on:click={() => {
+          onclick={() => {
             exit = true;
             setTimeout(() => {
               exit = false;
-              closeModal();
+              close();
               $gameState = "countdown";
             }, 1200);
           }}

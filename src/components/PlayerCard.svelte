@@ -3,7 +3,7 @@
 
   let { playerName, lives } = $props(); 
 
-  let dead = $derived(() => lives <= 0);
+  let dead = $derived(lives <= 0);
 </script>
 
 <div

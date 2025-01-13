@@ -1,22 +1,25 @@
 <script>
-  import {gamePlayers, gameState} from "$lib/stores";
+  import {gameState} from "$lib/stores";
   import PlayerCard from "../components/PlayerCard.svelte";
   import Timer from "../components/Timer.svelte";
   import {words} from "../assets/words.js";
   import logo from "../assets/logo.svg";
-  import {phase} from "$lib/stores";
-  import {openModal} from "svelte-modals";
+  import {modals} from "svelte-modals";
   import CorrectAnswerModal from "../components/CorrectAnswerModal.svelte";
   import FalseAnswerModal from "../components/FalseAnswerModal.svelte";
   import DeathAnswerModal from "../components/DeathAnswerModal.svelte";
   import WinnerModal from "../components/WinnerModal.svelte";
 
   let timerComponent;
-  let timeLeft = 3;
+  let timeLeft = $state(3);
 
-  let word = words[Math.floor(Math.random() * words.length)];
+  let word = $state(words[Math.floor(Math.random() * words.length)]);
 
-  $: if ($gameState === "countdown") countDown();
+  $effect(() => {
+    if($gameState === "countdown") {
+      countDown();
+    }
+  })
 
   function countDown() {
     const countDownTimer = setInterval(() => {
@@ -40,65 +43,65 @@
 
   function handleAnswer(isFalseAnswer) {
     if (isFalseAnswer) {
-      let currentPlayerLives = removeLife($gamePlayers.playerTurn);
+      let currentPlayerLives = removeLife($gameState.gamePlayers.playerTurn);
       if (currentPlayerLives === 0) {
-        let deadPlayer = $gamePlayers.players[$gamePlayers.playerTurn];
+        let deadPlayer = $gameState.gamePlayers.players[$gameState.gamePlayers.playerTurn];
         eliminatePlayer();
-        if ($gamePlayers.players.length === 1) {
-          openModal(WinnerModal, {});
+        if ($gameState.gamePlayers.players.length === 1) {
+          modals.open(WinnerModal, {});
           return;
         }
-        openModal(DeathAnswerModal, {
+        modals.open(DeathAnswerModal, {
           player: deadPlayer,
           word: word,
-          nextPlayer: $gamePlayers.players[$gamePlayers.playerTurn].name,
+          nextPlayer: $gameState.gamePlayers.players[$gameState.gamePlayers.playerTurn].name,
         });
         return;
       }
     }
 
-    let lastPlayer = $gamePlayers.playerTurn;
+    let lastPlayer = $gameState.gamePlayers.playerTurn;
     moveToNextPlayer();
     if (isFalseAnswer) {
-      openModal(FalseAnswerModal, {
+      modals.open(FalseAnswerModal, {
         player: lastPlayer,
         word: word,
-        nextPlayer: $gamePlayers.players[$gamePlayers.playerTurn].name,
+        nextPlayer: $gameState.gamePlayers.players[$gameState.gamePlayers.playerTurn].name,
       });
     } else {
-      openModal(CorrectAnswerModal, {
+      modals.open(CorrectAnswerModal, {
         player: lastPlayer,
         word: word,
-        nextPlayer: $gamePlayers.players[$gamePlayers.playerTurn].name,
+        nextPlayer: $gameState.gamePlayers.players[$gameState.gamePlayers.playerTurn].name,
       });
     }
   }
 
   function moveToNextPlayer() {
-    $gamePlayers.playerTurn =
-      ($gamePlayers.playerTurn + 1) % $gamePlayers.players.length;
+    $gameState.gamePlayers.playerTurn =
+      ($gameState.gamePlayers.playerTurn + 1) % $gameState.gamePlayers.players.length;
   }
 
   function removeLife(index) {
-    $gamePlayers.players[index].lives--;
-    return $gamePlayers.players[index].lives;
+    $gameState.gamePlayers.players[index].lives--;
+    return $gameState.gamePlayers.players[index].lives;
   }
 
   function eliminatePlayer() {
-    const playerToRemove = $gamePlayers.players.splice(
-      $gamePlayers.playerTurn,
+    const playerToRemove = $gameState.gamePlayers.players.splice(
+      $gameState.gamePlayers.playerTurn,
       1
     )[0];
-    $gamePlayers.deadPlayers.push(playerToRemove);
+    $gameState.gamePlayers.deadPlayers.push(playerToRemove);
 
-    if ($gamePlayers.playerTurn === $gamePlayers.players.length) {
-      $gamePlayers.playerTurn = 0;
+    if ($gameState.gamePlayers.playerTurn === $gameState.gamePlayers.players.length) {
+      $gameState.gamePlayers.playerTurn = 0;
     }
   }
 
   function restart() {
     location.reload();
-    $phase = "settings";
+    $gameState.phase = "settings";
   }
 </script>
 
@@ -110,7 +113,7 @@
   >
     <img src={logo} alt="logo" class="bg-no-repeat bg-contain h-full w-fit" />
     <button
-      on:click={restart}
+      onclick={restart}
       class="flex items-center bg-neutral-300 hover:bg-neutral-200 hover:border-neutral-400 active:bg-neutral-300 active:border-black duration-200 border-2 border-black rounded-full px-2 py-1 poppins font-semibold"
       >RESTART
     </button>
@@ -125,7 +128,9 @@
         >
           aeg
         </p>
-        <Timer bind:this={timerComponent} />
+        <Timer bind:this={timerComponent} timesup={() => {
+          falseAnswer();
+        }} />
       </div>
     </label>
     <label class="relative w-full">
@@ -152,7 +157,7 @@
         </p>
         <input
           type="text"
-          value={$gamePlayers.players[$gamePlayers.playerTurn].name}
+          value={$gameState.gamePlayers.players[$gameState.gamePlayers.playerTurn].name}
           disabled
           class="text-right lg:text-start font-semibold poppins text-2xl md:text-4xl focus:outline-none border-none w-full p-2 pr-3 bg-yellow-100 text-yellow-800 relative"
         />
@@ -163,12 +168,12 @@
     class="flex md:flex-col lg:flex-row gap-2 justify-between items-center mx-3 sm:mx-5 mb-5 md:mt-10 lg:mt-5 lg:[grid-area:buttons] lg:h-full"
   >
     <button
-      on:click={correctAnswer}
+      onclick={correctAnswer}
       class="bg-green-500 hover:bg-green-400 hover:border-green-700 duration-200 border-2 border-black rounded-lg w-36 md:w-full lg:h-full px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl font-semibold poppins"
       >ÕIGE</button
     >
     <button
-      on:click={falseAnswer}
+      onclick={falseAnswer}
       class="bg-red-500 hover:bg-red-400 hover:border-red-700 duration-200 border-2 border-black rounded-lg w-36 md:w-full lg:h-full px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl font-semibold poppins"
       >VALE</button
     >
@@ -177,10 +182,10 @@
   <div
     class="flex flex-wrap justify-between sm:justify-start gap-2 md:h-fit mx-3 sm:mx-5 overflow-scroll sm:overflow-hidden pb-5 md:[grid-area:playerlist] lg:[grid-area:auto] lg:my-5 lg:pb-0 lg:h-full"
   >
-    {#each $gamePlayers.players as player}
+    {#each $gameState.gamePlayers.players as player}
       <PlayerCard playerName={player.name} lives={player.lives} />
     {/each}
-    {#each $gamePlayers.deadPlayers as player}
+    {#each $gameState.gamePlayers.deadPlayers as player}
       <PlayerCard playerName={player.name} lives={player.lives} />
     {/each}
   </div>

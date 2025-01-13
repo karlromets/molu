@@ -1,9 +1,9 @@
 <script>
   import logo from "../assets/logo.svg";
 
-  let y;
-  let innerWidth = 0;
-  let innerHeight = 0;
+  let y = $state(0);
+  let innerWidth = $state(0);
+  let innerHeight = $state(0);
 
   function goTop() {
     document.body.scrollIntoView();
@@ -17,7 +17,7 @@
       : " pointer-events-none opacity-0")}
 >
   <button
-    on:click={goTop}
+    onclick={goTop}
     class="hidden sm:grid ml-auto rounded-full bg-yellow-300 text-black px-3 sm:px-4 hover:bg-yellow-400 outline cursor-pointer aspect-square place-items-center"
     aria-label="Back to Top"
   >

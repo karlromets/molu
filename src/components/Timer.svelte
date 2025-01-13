@@ -1,16 +1,19 @@
 <script>
-  import {readable} from "svelte/store";
-  import {settings, gameState} from "$lib/stores";
-  import {createEventDispatcher} from "svelte";
+  import {gameState} from "$lib/stores";
   // Props
-  $: if ($gameState === "guessing") resetTimer();
 
-  export let countFrom = 0;
-  const dispatch = createEventDispatcher();
+  $effect(() => {
+    if ($gameState === "guessing") {
+      resetTimer();
+    }
+  });
+
+  let {timesup} = $props();
+  let countFrom = $state(0);
   // Reset function
   export function resetTimer() {
     countFrom = 0;
-    countFrom = $settings.time;
+    countFrom = $gameState.settings.time;
   }
   // Stop function
   export function stopTimer() {
@@ -18,33 +21,35 @@
   }
 
   // Reactive to account for changes in countFrom:
-  $: endDate = (function (secs) {
-    const e = Date.now() + secs * 1000;
-    return new Date(e);
-  })(countFrom);
+  const endDate = $derived((function (secs) {
+  const e = Date.now() + secs * 1000;
+  return new Date(e);
+  })(countFrom));
 
-  $: remaining = readable(countFrom, function start(set) {
+  // Convert remaining to $derived instead of readable store
+  const remaining = $derived(Math.max(Math.round((endDate - new Date()) / 1000), 0));
+
+  // Update timer using $effect
+  $effect(() => {
     const interval = setInterval(() => {
-      let r = Math.round((endDate - new Date()) / 1000);
-      r = Math.max(r, 0);
-      set(r);
-      if (r <= 0) {
+      if (remaining <= 0) {
         clearInterval(interval);
+        timesup();
       }
     }, 1000);
 
-    return function stop() {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   });
 
-  $: hh = Math.floor($remaining / 3600);
-  $: mm = Math.floor(($remaining - hh * 3600) / 60);
-  $: ss = $remaining - hh * 3600 - mm * 60;
+  let hh = $derived(Math.floor(remaining / 3600));
+  let mm = $derived(Math.floor((remaining - hh * 3600) / 60));
+  let ss = $derived(remaining - hh * 3600 - mm * 60);
 
-  $: if ($remaining === 0) {
-    dispatch("timesup");
-  }
+  $effect(() => {
+    if (remaining === 0) {
+    timesup()
+    }
+  })
 
   function f(value) {
     if (value < 10) {

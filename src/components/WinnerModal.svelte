@@ -1,11 +1,10 @@
 <script>
-  import {closeModal} from "svelte-modals";
   import {slide} from "svelte/transition";
   import {quintOut} from "svelte/easing";
-  import {gamePlayers, phase} from "$lib/stores";
+  import {gameState} from "$lib/stores";
 
-  export let isOpen;
-  let exit = false;
+  let {isOpen} = $props();
+  let exit = $state(false);
 </script>
 
 {#if isOpen}
@@ -31,17 +30,17 @@
         </div>
         <h2 class="text-center text-2xl font-semibold lg:text-6xl">ÕNNITLUSED!</h2>
         <h2 class="text-center text-xl lg:text-4xl">
-          {$gamePlayers.players[0].name} on võitnud!
+          {$gameState.gamePlayers.players[0].name} on võitnud!
         </h2>
       </div>
       <div class="mt-3 flex justify-center p-4 rounded-b-md">
         <button
-          on:click={() => {
+          onclick={() => {
             exit = true;
             setTimeout(() => {
               exit = false;
-              closeModal();
-              $phase = "settings";
+              close();
+              $gameState.phase = "settings";
               
             }, 2500);
           }}

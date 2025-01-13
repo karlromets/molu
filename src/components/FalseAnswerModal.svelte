@@ -1,25 +1,21 @@
 <script>
-  import {closeModal, openModal} from "svelte-modals";
   import {slide} from "svelte/transition";
   import {quintOut} from "svelte/easing";
-  import {gameState, gamePlayers, settings} from "$lib/stores";
+  import {gameState} from "$lib/stores";
   import heart from "../assets/heart.png";
   import {tods} from "../assets/tods.js";
   import WinnerModal from "../components/WinnerModal.svelte";
+  import {modals} from "svelte-modals";
 
-  export let isOpen;
-  export let player, word, nextPlayer;
+  let {isOpen, player, word, nextPlayer, close} = $props();
 
-  let tod = "";
-  let todType = "";
-  let selectedOption = "";
-  let loading = false;
-  let exit = false;
-  let lastPlayer = $gamePlayers.players[player].name;
-  let punishment = "";
-  $: if ($settings.punishmentsChoice) {
-    punishment = generatePunishment();
-  }
+  let tod = $state("");
+  let todType = $state("");
+  let selectedOption = $state("");
+  let loading = $state(false);
+  let exit = $state(false);
+  let lastPlayer = $gameState.gamePlayers.players[player].name;
+  let punishment = $derived($gameState.settings.punishmentsChoice ? generatePunishment() : "");
 
   function generateTOD() {
     loading = true;
@@ -62,25 +58,25 @@
     let cumulativeProbability = 0;
     const randomValue = Math.random() * 100; 
 
-    for (let i = 0; i < $settings.punishments.length; i++) {
-      cumulativeProbability += $settings.punishments[i].probability;
+    for (let i = 0; i < $gameState.settings.punishments.length; i++) {
+      cumulativeProbability += $gameState.settings.punishments[i].probability;
       if (randomValue < cumulativeProbability) {
-        return $settings.punishments[i].punishment;
+        return $gameState.settings.punishments[i].punishment;
       }
     }
   }
 
   function removeLife(index) {
-    $gamePlayers.players[index].lives--;
-    return $gamePlayers.players[index].lives;
+    $gameState.gamePlayers.players[index].lives--;
+    return $gameState.gamePlayers.players[index].lives;
   }
 
   function eliminatePlayer(index) {
-    const playerToRemove = $gamePlayers.players.splice(index, 1)[0];
-    $gamePlayers.deadPlayers.push(playerToRemove);
+    const playerToRemove = $gameState.gamePlayers.players.splice(index, 1)[0];
+    $gameState.gamePlayers.deadPlayers.push(playerToRemove);
 
-    if ($gamePlayers.playerTurn === $gamePlayers.players.length) {
-      $gamePlayers.playerTurn = 0;
+    if ($gameState.gamePlayers.playerTurn === $gameState.gamePlayers.players.length) {
+      $gameState.gamePlayers.playerTurn = 0;
     }
   }
 </script>
@@ -124,7 +120,7 @@
               />)</span
             >
           </li>
-          {#if $settings.punishmentsChoice}
+          {#if $gameState.settings.punishmentsChoice}
             <hr class="my-2 mt-4 border-black" />
             <span class="lg:text-4xl"><b>Karistus:</b> {punishment}</span>
             <fieldset class="flex gap-6 lg:text-4xl">
@@ -167,7 +163,7 @@
             <li class="lg:text-4xl">
               Juhul kui {nextPlayer} hetkel ei oska midagi mõelda siis
               <button
-                on:click={generateTOD}
+                onclick={generateTOD}
                 class="bg-amber-500 hover:bg-amber-300 active:bg-amber-500 border-2 border-black rounded-md font-medium px-2 inline-flex items-center gap-2"
                 >GENEREERI <div
                   class={"flex items-center justify-center " +
@@ -223,7 +219,7 @@
       >
         <button
           disabled={selectedOption === ""}
-          on:click={() => {
+          onclick={() => {
             if (selectedOption === "declineToDo") {
               let currentPlayerLives = removeLife(player);
               if (currentPlayerLives === 0) {
@@ -233,12 +229,12 @@
             exit = true;
             setTimeout(() => {
               exit = false;
-              closeModal();
+              close();
               tod = "";
               todType = "";
               selectedOption = "";
-              if ($gamePlayers.players.length === 1) {
-                openModal(WinnerModal, {});
+              if ($gameState.gamePlayers.players.length === 1) {
+                modals.open(WinnerModal, {});
                 return;
               } else {
                 $gameState = "countdown";

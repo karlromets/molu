@@ -1,5 +1,5 @@
 <script>
-  import {phase, settings, gamePlayers, gameState} from "$lib/stores";
+  import {gameState, updateSettingsPlayers} from "$lib/stores";
   import {onMount} from "svelte";
   import logopadding from "../assets/logopadding.png";
   import {toast} from "@zerodevx/svelte-toast";
@@ -7,17 +7,17 @@
   onMount(() => {
     const settingsString = localStorage.getItem("settings");
     if (settingsString) {
-      $settings = JSON.parse(settingsString);
+      $gameState.settings = JSON.parse(settingsString);
     }
   });
 
   function saveLS() {
-    localStorage.setItem("settings", JSON.stringify($settings));
+    localStorage.setItem("settings", JSON.stringify($gameState.settings));
   }
 
   function validateSettings(settings) {
-    const hasEnoughPlayers = settings.players.length >= 2;
-    const hasPunishmentsChosen = settings.punishmentsChoice;
+    const hasEnoughPlayers = $gameState.settings.players.length >= 2;
+    const hasPunishmentsChosen = $gameState.settings.punishmentsChoice;
 
     if (!hasEnoughPlayers) {
       toast.push("Vähemalt kaks mängijat peab olema, et alustada");
@@ -26,7 +26,7 @@
 
     if (hasPunishmentsChosen) {
       // Check if probability sum = 100
-      const totalProbability = settings.punishments.reduce(
+      const totalProbability = $gameState.settings.punishments.reduce(
         (total, punishment) => total + punishment.probability,
         0
       );
@@ -37,27 +37,27 @@
     }
 
     // Create a new object and assing the set initial lives to each player
-    $gamePlayers.players = settings.players.map((player) => ({
+    $gameState.gamePlayers.players = $gameState.settings.players.map((player) => ({
       name: player,
-      lives: settings.lives,
+      lives: $gameState.settings.lives,
     }));
     // Pick a random starting player
-    $gamePlayers.playerTurn = Math.floor(
-      Math.random() * settings.players.length
+    $gameState.gamePlayers.playerTurn = Math.floor(
+      Math.random() * $gameState.settings.players.length
     );
     exit = true;
     setTimeout(() => {
       exit = false;
-      $gamePlayers.deadPlayers = [];
-      $phase = "game";
+      $gameState.gamePlayers.deadPlayers = [];
+      $gameState.phase = "game";
       $gameState = "countdown";
     }, 1000);
   }
 
-  let newPlayerName = "";
-  let punishmentName = "";
-  let punishmentProbability;
-  let exit = "";
+  let newPlayerName = $state("");
+  let punishmentName = $state("");
+  let punishmentProbability = $state(0);
+  let exit = $state("");
 </script>
 
 <div
@@ -87,19 +87,16 @@
               class="border-2 border-r-0 rounded-tr-none rounded-br-none border-black rounded-lg pl-2 focus:outline-none w-full"
             />
             <button
-              on:click={() => {
+              onclick={() => {
                 if (newPlayerName.trim() !== "") {
-                  let duplicate = $settings.players.some(
+                  let duplicate = $gameState.settings.players.some(
                     (p) => p === newPlayerName.trim()
                   );
                   if (!duplicate) {
-                    settings.update((currentSettings) => ({
-                      ...currentSettings,
-                      players: [
-                        ...currentSettings.players,
-                        newPlayerName.trim(),
-                      ],
-                    }));
+                    updateSettingsPlayers([
+                      ...$gameState.settings.players,
+                      newPlayerName.trim()
+                    ]);
                     newPlayerName = ""; // Clear input after adding player
                     saveLS();
                   } else {
@@ -118,12 +115,12 @@
       <ul
         class="text-xl poppins p-2 h-32 sm:h-32 overflow-y-auto overflow-x-hidden"
       >
-        {#each $settings.players as playerName}
+        {#each $gameState.settings.players as playerName}
           <li class="flex justify-between">
             <span>{playerName}</span>
             <button
-              on:click={() => {
-                $settings.players = $settings.players.filter(
+              onclick={() => {
+                $gameState.settings.players = $gameState.settings.players.filter(
                   (player) => player !== playerName
                 );
                 saveLS();
@@ -144,7 +141,7 @@
         <h1 class="font-semibold text-xl">
           Arvamise aeg <i class="fa-solid fa-clock"></i>
         </h1>
-        <span class="poppins font-semibold text-xl">{$settings.time}s</span>
+        <span class="poppins font-semibold text-xl">{$gameState.settings.time}s</span>
       </div>
       <div class="">
         <input
@@ -153,8 +150,8 @@
           step="5"
           min="5"
           max="120"
-          bind:value={$settings.time}
-          on:change={() => {
+          bind:value={$gameState.settings.time}
+          onchange={() => {
             saveLS();
           }}
           class="slider"
@@ -166,7 +163,7 @@
         <h1 class="font-semibold text-xl">
           Elud <i class="fa-solid fa-heart text-red-600"></i>
         </h1>
-        <span class="poppins font-semibold text-xl">{$settings.lives}</span>
+        <span class="poppins font-semibold text-xl">{$gameState.settings.lives}</span>
       </div>
       <div class="">
         <input
@@ -176,8 +173,8 @@
           min="1"
           max="5"
           class="slider"
-          bind:value={$settings.lives}
-          on:change={() => {
+          bind:value={$gameState.settings.lives}
+          onchange={() => {
             saveLS();
           }}
         />
@@ -188,30 +185,30 @@
   <section class="w-full mt-2 md:[grid-area:punishments]">
     <div
       class={"bg-yellow-300 max-h-64 border-2 border-black rounded-lg mx-2 duration-200 flex flex-col gap-2 overflow-hidden " +
-        ($settings.punishmentsChoice ? "h-64" : "h-[53px]")}
+        ($gameState.settings.punishmentsChoice ? "h-64" : "h-[53px]")}
     >
       <label class="inline-flex items-center cursor-pointer p-2 pb-0">
         <input
           type="checkbox"
-          bind:checked={$settings.punishmentsChoice}
-          on:change={() => {
+          bind:checked={$gameState.settings.punishmentsChoice}
+          onchange={() => {
             saveLS();
           }}
           class="sr-only peer"
         />
         <div
           class={"duration-200 relative w-11 h-6  rounded-full peer bg-white peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute border-black border-2 after:border-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all " +
-            ($settings.punishmentsChoice
+            ($gameState.settings.punishmentsChoice
               ? "after:bg-white   peer-checked:bg-black"
               : "after:bg-black peer-checked:bg-yellow-300")}
         ></div>
         <span
           class={"ms-3 text-xl font-semibold duration-200 " +
-            ($settings.punishmentsChoice ? "" : "opacity-50")}>Karistused</span
+            ($gameState.settings.punishmentsChoice ? "" : "opacity-50")}>Karistused</span
         >
       </label>
       <div class="flex flex-col gap-2">
-        {#if $settings.punishmentsChoice}
+        {#if $gameState.settings.punishmentsChoice}
           <form
             type="submit"
             class="flex flex-col gap-2 border-b-2 border-black p-2 pt-0 pb-2"
@@ -235,7 +232,7 @@
                 class="border-2 border-r-0 rounded-tr-none rounded-br-none border-black rounded-lg pl-2 focus:outline-none w-full"
               />
               <button
-                on:click={(event) => {
+                onclick={(event) => {
                   event.preventDefault();
 
                   if (!punishmentProbability) {
@@ -247,14 +244,14 @@
                   }
 
                   // Check if the punishment already exists before adding it
-                  let duplicate = $settings.punishments.some(
+                  let duplicate = $gameState.settings.punishments.some(
                     (p) => p.punishment === punishmentName
                   );
 
                   // Add the new punishment to the punishments array
                   if (!duplicate) {
-                    $settings.punishments = [
-                      ...$settings.punishments,
+                    $gameState.settings.punishments = [
+                      ...$gameState.settings.punishments,
                       {
                         punishment: punishmentName,
                         probability: punishmentProbability,
@@ -278,7 +275,7 @@
           <ul
             class="text-xl poppins p-2 pt-0 h-28 overflow-y-auto overflow-x-hidden"
           >
-            {#each $settings.punishments as punishment}
+            {#each $gameState.settings.punishments as punishment}
               <li class="flex justify-between items-center mb-2">
                 <div class="overflow-x-auto max-w-[280px]">
                   <span class=" text-nowrap">{punishment.punishment}</span>
@@ -286,14 +283,14 @@
                 <div class="flex">
                   <input
                     bind:value={punishment.probability}
-                    on:change={saveLS}
+                    onchange={saveLS}
                     type="number"
                     placeholder="%"
                     class="border-2 border-black border-r-0 rounded-tr-none rounded-br-none rounded-lg focus:outline-none text-center w-12"
                   />
                   <button
-                    on:click={() => {
-                      $settings.punishments = $settings.punishments.filter(
+                    onclick={() => {
+                      $gameState.settings.punishments = $gameState.settings.punishments.filter(
                         (p) => p.punishment !== punishment.punishment
                       );
                       saveLS();
@@ -313,8 +310,8 @@
 
   <section class=" h-fit mx-auto my-2 md:[grid-area:start]">
     <button
-      on:click={() => {
-        validateSettings($settings);
+      onclick={() => {
+        validateSettings($gameState.settings);
       }}
       class="text-2xl sm:text-3xl font-semibold text-black text-center cursor-pointer bg-yellow-300 border-black border-2 rounded-full px-6 py-3 hover:bg-yellow-200 active:translate-y-1 duration-200"
     >

@@ -1,12 +1,10 @@
 <script>
-  import {closeModal} from "svelte-modals";
   import {slide} from "svelte/transition";
   import {quintOut} from "svelte/easing";
   import {gameState} from "$lib/stores";
 
-  export let isOpen;
-  export let player, word, nextPlayer;
-  let exit = false;
+  let {isOpen, player, word, nextPlayer, close} = $props();
+  let exit = $state(false);
 </script>
 
 {#if isOpen}
@@ -49,11 +47,11 @@
         class="mt-8 flex justify-end bg-neutral-200 p-4 border-t-2 border-black rounded-b-md"
       >
         <button
-          on:click={() => {
+          onclick={() => {
             exit = true;
             setTimeout(() => {
               exit = false;
-              closeModal();
+              close();
               $gameState = "countdown";
             }, 1200);
           }}
