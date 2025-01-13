@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+h1,
+h2,
+h3,
+.poppins {
+  font-family: "Poppins", sans-serif;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.slider::-webkit-slider-runnable-track {
+  height: 15px;
+  background: black;
+  border-radius: 16px;
+}
+
+.slider::-moz-range-track {
+  height: 15px;
+  background: black;
+  border-radius: 16px;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background-color: white;
+  border: 2px solid black;
+}
+
+.slider::-moz-range-thumb {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background-color: white;
+  border: 2px solid black;
+}
+
+.gridAreas {
+  grid-template-areas:
+    "title title"
+    ". punishments"
+    ". punishments"
+    "start start";
+  background: red;
+}
+
+:root {
+  --toastBackground: #fca5a5;
+  --toastColor: #000000;
+  --toastBarBackground: #000000;
+}
