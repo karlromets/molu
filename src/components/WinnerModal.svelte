@@ -31,7 +31,7 @@
         </div>
         <h2 class="text-center text-2xl font-semibold lg:text-6xl">ÕNNITLUSED!</h2>
         <h2 class="text-center text-xl lg:text-4xl">
-          {$gameState.gamePlayers.players[0].name} on võitnud!
+          {$gameState.players.active[0].name} on võitnud!
         </h2>
       </div>
       <div class="mt-3 flex justify-center p-4 rounded-b-md">

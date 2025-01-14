@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Svelte",
+  "_version": "5.0.0",
+
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "$lib/*": ["src/lib/*"]
+    },
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2023",
+    /**
+        Svelte Preprocess cannot figure out whether you have a value or a type, so tell TypeScript
+        to enforce using `import type` instead of `import` for Types.
+       */
+    "verbatimModuleSyntax": true,
+    /**
+        To have warnings/errors of the Svelte compiler at the correct position,
+        enable source maps by default.
+       */
+    "sourceMap": true,
+    /**   
+        Set isolatedModules to true so that each file is looked at in isolation. TypeScript has a few features which require cross-file analysis and compilation, which the Svelte compiler and tooling like Vite don’t do. 
+    */
+    "isolatedModules": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "eslint.config.js",
+    "tailwind.config.js",
+    "vite.config.js",
+    "postcss.config.js"
+  ],
+  "exclude": ["node_modules/*", "build/*", ".svelte-kit/*", "dist/*"]
+}

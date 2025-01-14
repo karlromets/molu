@@ -2,7 +2,7 @@
   import {slide} from "svelte/transition";
   import {quintOut} from "svelte/easing";
   import {gameState} from "$lib/stores";
-  import { X } from "lucide-svelte";
+  import { Play, X } from "lucide-svelte";
 
   let {isOpen, player, word, nextPlayer, close} = $props();
   let exit = $state(false);
@@ -53,7 +53,7 @@
             setTimeout(() => {
               exit = false;
               close();
-              $gameState = "countdown";
+              $gameState.state = "countdown";
             }, 1200);
           }}
           class="bg-yellow-300 font-semibold poppins px-4 py-2 rounded-lg border-2 border-black disabled:opacity-50 lg:text-4xl"

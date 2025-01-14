@@ -53,15 +53,12 @@ export function updatePlayers(players) {
   }));
 }
 
-export function updateSettingsPlayers(players) {
+export function updateSettingsPlayers(newPlayer) {
   gameState.update((state) => ({
     ...state,
     settings: {
       ...state.settings,
-      players: [
-        ...state.settings.players,
-        ...players,
-      ],
+      players: [...state.settings.players, newPlayer],
     },
   }));
 }

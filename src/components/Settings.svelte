@@ -16,7 +16,7 @@
     localStorage.setItem("settings", JSON.stringify($gameState.settings));
   }
 
-  function validateSettings(settings) {
+  function validateSettings() {
     const hasEnoughPlayers = $gameState.settings.players.length >= 2;
     const hasPunishmentsChosen = $gameState.settings.punishmentsChoice;
 
@@ -38,20 +38,20 @@
     }
 
     // Create a new object and assing the set initial lives to each player
-    $gameState.gamePlayers.players = $gameState.settings.players.map((player) => ({
+    $gameState.players.active = $gameState.settings.players.map((player) => ({
       name: player,
       lives: $gameState.settings.lives,
     }));
     // Pick a random starting player
-    $gameState.gamePlayers.playerTurn = Math.floor(
+    $gameState.players.currentTurn = Math.floor(
       Math.random() * $gameState.settings.players.length
     );
     exit = true;
     setTimeout(() => {
       exit = false;
-      $gameState.gamePlayers.deadPlayers = [];
+      $gameState.players.dead = [];
       $gameState.phase = "game";
-      $gameState = "countdown";
+      $gameState.state = "countdown";
     }, 1000);
   }
 
@@ -94,10 +94,7 @@
                     (p) => p === newPlayerName.trim()
                   );
                   if (!duplicate) {
-                    updateSettingsPlayers([
-                      ...$gameState.settings.players,
-                      newPlayerName.trim()
-                    ]);
+                    updateSettingsPlayers(newPlayerName.trim());
                     newPlayerName = ""; // Clear input after adding player
                     saveLS();
                   } else {

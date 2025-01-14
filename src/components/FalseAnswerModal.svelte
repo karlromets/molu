@@ -6,6 +6,7 @@
   import {tods} from "../assets/tods.js";
   import WinnerModal from "../components/WinnerModal.svelte";
   import {modals} from "svelte-modals";
+  import { Check, Play, Shell } from "lucide-svelte";
 
   let {isOpen, player, word, nextPlayer, close} = $props();
 
@@ -14,7 +15,7 @@
   let selectedOption = $state("");
   let loading = $state(false);
   let exit = $state(false);
-  let lastPlayer = $gameState.gamePlayers.players[player].name;
+  let lastPlayer = $gameState.players.active[player].name;
   let punishment = $derived($gameState.settings.punishmentsChoice ? generatePunishment() : "");
 
   function generateTOD() {
@@ -67,16 +68,16 @@
   }
 
   function removeLife(index) {
-    $gameState.gamePlayers.players[index].lives--;
-    return $gameState.gamePlayers.players[index].lives;
+    $gameState.players.active[index].lives--;
+    return $gameState.players.active[index].lives;
   }
 
   function eliminatePlayer(index) {
-    const playerToRemove = $gameState.gamePlayers.players.splice(index, 1)[0];
-    $gameState.gamePlayers.deadPlayers.push(playerToRemove);
+    const playerToRemove = $gameState.players.active.splice(index, 1)[0];
+    $gameState.players.dead.push(playerToRemove);
 
-    if ($gameState.gamePlayers.playerTurn === $gameState.gamePlayers.players.length) {
-      $gameState.gamePlayers.playerTurn = 0;
+    if ($gameState.players.currentTurn === $gameState.players.active.length) {
+      $gameState.players.currentTurn = 0;
     }
   }
 </script>
@@ -233,11 +234,11 @@
               tod = "";
               todType = "";
               selectedOption = "";
-              if ($gameState.gamePlayers.players.length === 1) {
+              if ($gameState.players.active.length === 1) {
                 modals.open(WinnerModal, {});
                 return;
               } else {
-                $gameState = "countdown";
+                $gameState.state = "countdown";
               }
             }, 1200);
           }}

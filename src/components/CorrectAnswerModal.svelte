@@ -27,7 +27,7 @@
       <div class="p-4">
         <ul class="list-disc list-inside text-sm sm:text-base lg:text-4xl">
           <li>
-            {$gameState.gamePlayers.players[player].name} arvas sõna <b>{word}</b> õigesti!
+            {$gameState.players.active[player].name} arvas sõna <b>{word}</b> õigesti!
           </li>
           <li>Järgmine mängija on <b>{nextPlayer}</b>!</li>
         </ul>
@@ -41,7 +41,7 @@
             setTimeout(() => {
               exit = false;
               close();
-              $gameState = "countdown";
+              $gameState.state = "countdown";
             }, 1200);
           }}
           class="bg-yellow-300 hover:bg-yellow-200 font-semibold poppins px-4 py-2 rounded-lg border-2 border-black lg:text-4xl"

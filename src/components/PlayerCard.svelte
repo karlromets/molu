@@ -1,14 +1,15 @@
 <script>
+  import { Skull } from "lucide-svelte";
   import heart from "../assets/heart.png";
 
-  let { playerName, lives } = $props(); 
+  let { playerName, lives } = $props();
 
   let dead = $derived(lives <= 0);
 </script>
 
 <div
   class={`relative rounded-lg border-black border-2 w-36 h-fit drop-shadow-xl overflow-hidden ${
-    dead ? 'opacity-50' : ''
+    dead ? "opacity-50" : ""
   }`}
 >
   <div
@@ -19,14 +20,19 @@
     </span>
   </div>
   <div class="flex items-center justify-center py-2 lg:py-3 bg-yellow-100 h-10">
-      {#if lives}
-        {#each Array.from({length: lives})}
-          <img src={heart} class="h-4 w-4 lg:h-5 lg:w-5" alt="Heart" />
-        {/each}
-      {:else if lives < 1}
-      <Skull color="#000000"/>
-      {:else}
-        Error
-      {/if}
+    {#if lives}
+      {#each Array.from({ length: lives }) as index}
+        <img
+          src={heart}
+          class="h-4 w-4 lg:h-5 lg:w-5"
+          alt="Heart"
+          key={`${playerName}-${index}`}
+        />
+      {/each}
+    {:else if lives < 1}
+      <Skull color="#000000" />
+    {:else}
+      Error
+    {/if}
   </div>
 </div>

@@ -2,6 +2,10 @@
   import Settings from "../../components/Settings.svelte";
   import Game from "../../components/Game.svelte";
   import {gameState} from "$lib/stores";
+
+  $effect(() => {
+    console.log($gameState);
+  })
 </script>
 
 

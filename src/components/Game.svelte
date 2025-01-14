@@ -1,10 +1,10 @@
 <script>
-  import {gameState} from "$lib/stores";
+  import { gameState, updateGameState } from "$lib/stores";
   import PlayerCard from "../components/PlayerCard.svelte";
   import Timer from "../components/Timer.svelte";
-  import {words} from "../assets/words.js";
+  import { words } from "../assets/words.js";
   import logo from "../assets/logo.svg";
-  import {modals} from "svelte-modals";
+  import { modals } from "svelte-modals";
   import CorrectAnswerModal from "../components/CorrectAnswerModal.svelte";
   import FalseAnswerModal from "../components/FalseAnswerModal.svelte";
   import DeathAnswerModal from "../components/DeathAnswerModal.svelte";
@@ -12,21 +12,33 @@
 
   let timerComponent;
   let timeLeft = $state(3);
+  let previousState = "";
 
   let word = $state(words[Math.floor(Math.random() * words.length)]);
 
   $effect(() => {
-    if($gameState === "countdown") {
-      countDown();
+    console.debug($gameState.state);
+    if ($gameState.state === previousState) {
+      return;
+    } else {
+      switch ($gameState.state) {
+        case "countdown":
+          countDown();
+          break;
+        case "guessing":
+          timerComponent.resetTimer();
+          break;
+      }
     }
-  })
+    previousState = $gameState.state;
+  });
 
   function countDown() {
     const countDownTimer = setInterval(() => {
       timeLeft--;
       if (timeLeft <= 0) {
         clearInterval(countDownTimer);
-        $gameState = "guessing";
+        updateGameState("guessing");
         word = words[Math.floor(Math.random() * words.length)];
         timeLeft = 3;
       }
@@ -43,59 +55,70 @@
 
   function handleAnswer(isFalseAnswer) {
     if (isFalseAnswer) {
-      let currentPlayerLives = removeLife($gameState.gamePlayers.playerTurn);
+      timerComponent.stopTimer();
+      console.debug(`Current turn player index: ${$gameState.players.currentTurn}`);
+      let currentPlayerLives = removeLife(
+        $gameState.players.currentTurn
+      );
       if (currentPlayerLives === 0) {
-        let deadPlayer = $gameState.gamePlayers.players[$gameState.gamePlayers.playerTurn];
+        let deadPlayer =
+          $gameState.players.active[$gameState.players.currentTurn];
         eliminatePlayer();
-        if ($gameState.gamePlayers.players.length === 1) {
+        if ($gameState.players.active.length === 1) {
           modals.open(WinnerModal, {});
           return;
         }
         modals.open(DeathAnswerModal, {
           player: deadPlayer,
           word: word,
-          nextPlayer: $gameState.gamePlayers.players[$gameState.gamePlayers.playerTurn].name,
+          nextPlayer:
+            $gameState.players.active[$gameState.players.currentTurn].name,
         });
         return;
       }
     }
 
-    let lastPlayer = $gameState.gamePlayers.playerTurn;
+    let lastPlayer = $gameState.players.currentTurn;
     moveToNextPlayer();
     if (isFalseAnswer) {
       modals.open(FalseAnswerModal, {
         player: lastPlayer,
         word: word,
-        nextPlayer: $gameState.gamePlayers.players[$gameState.gamePlayers.playerTurn].name,
+        nextPlayer:
+          $gameState.players.active[$gameState.players.currentTurn].name,
       });
     } else {
       modals.open(CorrectAnswerModal, {
         player: lastPlayer,
         word: word,
-        nextPlayer: $gameState.gamePlayers.players[$gameState.gamePlayers.playerTurn].name,
+        nextPlayer:
+          $gameState.players.active[$gameState.players.currentTurn].name,
       });
     }
   }
 
   function moveToNextPlayer() {
-    $gameState.gamePlayers.playerTurn =
-      ($gameState.gamePlayers.playerTurn + 1) % $gameState.gamePlayers.players.length;
+    $gameState.players.currentTurn =
+      ($gameState.players.currentTurn + 1) % $gameState.players.active.length;
   }
 
   function removeLife(index) {
-    $gameState.gamePlayers.players[index].lives--;
-    return $gameState.gamePlayers.players[index].lives;
+    console.debug(`Removing life for player at index: ${index}`);
+    $gameState.players.active[index].lives--;
+    const remainingLives = $gameState.players.active[index].lives;
+    console.debug(`Player at index ${index} now has ${remainingLives} lives remaining.`);
+    return remainingLives;
   }
 
   function eliminatePlayer() {
-    const playerToRemove = $gameState.gamePlayers.players.splice(
-      $gameState.gamePlayers.playerTurn,
+    const playerToRemove = $gameState.players.active.splice(
+      $gameState.players.currentTurn,
       1
     )[0];
-    $gameState.gamePlayers.deadPlayers.push(playerToRemove);
+    $gameState.players.dead.push(playerToRemove);
 
-    if ($gameState.gamePlayers.playerTurn === $gameState.gamePlayers.players.length) {
-      $gameState.gamePlayers.playerTurn = 0;
+    if ($gameState.players.currentTurn === $gameState.players.active.length) {
+      $gameState.players.currentTurn = 0;
     }
   }
 
@@ -128,9 +151,12 @@
         >
           aeg
         </p>
-        <Timer bind:this={timerComponent} timesup={() => {
-          falseAnswer();
-        }} />
+        <Timer
+          bind:this={timerComponent}
+          timesup={() => {
+            falseAnswer();
+          }}
+        />
       </div>
     </label>
     <label class="relative w-full">
@@ -157,7 +183,7 @@
         </p>
         <input
           type="text"
-          value={$gameState.gamePlayers.players[$gameState.gamePlayers.playerTurn].name}
+          value={$gameState.players.active[$gameState.players.currentTurn].name}
           disabled
           class="text-right lg:text-start font-semibold poppins text-2xl md:text-4xl focus:outline-none border-none w-full p-2 pr-3 bg-yellow-100 text-yellow-800 relative"
         />
@@ -182,10 +208,10 @@
   <div
     class="flex flex-wrap justify-between sm:justify-start gap-2 md:h-fit mx-3 sm:mx-5 overflow-scroll sm:overflow-hidden pb-5 md:[grid-area:playerlist] lg:[grid-area:auto] lg:my-5 lg:pb-0 lg:h-full"
   >
-    {#each $gameState.gamePlayers.players as player}
+    {#each $gameState.players.active as player}
       <PlayerCard playerName={player.name} lives={player.lives} />
     {/each}
-    {#each $gameState.gamePlayers.deadPlayers as player}
+    {#each $gameState.players.dead as player}
       <PlayerCard playerName={player.name} lives={player.lives} />
     {/each}
   </div>
@@ -193,7 +219,7 @@
 
 <div
   class={"fixed top-0 left-0 w-full h-full backdrop-blur-md z-[9] flex items-center justify-center " +
-    ($gameState === "countdown" ? "" : "hidden")}
+    ($gameState.state === "countdown" ? "" : "hidden")}
 >
   <span
     class=" text-[15rem] font-semibold drop-shadow-[7px_10px_0px_rgba(0,0,0,0.8)] text-yellow-300"
