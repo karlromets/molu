@@ -42,7 +42,6 @@
 
     timerInterval = setInterval(() => {
       const remaining = Math.max(Math.round((endTime - Date.now()) / 1000), 0);
-      console.debug(`Timer tick. Remaining time: ${remaining} seconds.`);
 
       if (remaining <= 0) {
         console.debug("Time is up. Stopping timer and triggering timesup.");
@@ -51,7 +50,6 @@
       }
 
       countFrom = remaining;
-      console.debug(`countFrom updated to ${countFrom} seconds.`);
     }, 1000);
   }
 
