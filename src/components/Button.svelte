@@ -1,5 +1,6 @@
 <script lang="ts">
   import { cn } from "$lib/utils/cn";
+  import * as m from "$lib/paraglide/messages.js";
 
   let props = $props<{
     class?: string;
@@ -14,6 +15,6 @@
 
 <button class={defaultButtonClasses} tabindex="0" onclick={props.onclick}>
   <span class={cn(defaultSpanClasses, props.class)}>
-    {props.text ?? "Press this"}
+    {props.text ?? m.press_this()}
   </span>
 </button>

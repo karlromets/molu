@@ -3,6 +3,7 @@
   import { quintOut } from "svelte/easing";
   import { gameState } from "$lib/stores";
   import { House, Medal } from "lucide-svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   let { isOpen } = $props();
   let exit = $state(false);
@@ -30,10 +31,10 @@
           <Medal color="#000000" />
         </div>
         <h2 class="text-center text-2xl font-semibold lg:text-6xl">
-          ÕNNITLUSED!
+          {m.congratulations()}
         </h2>
         <h2 class="text-center text-xl lg:text-4xl">
-          {$gameState.players.active[0].name} on võitnud!
+          {m.winner_announcement({ name: $gameState.players.active[0].name })}
         </h2>
       </div>
       <div class="mt-3 flex justify-center p-4 rounded-b-md">

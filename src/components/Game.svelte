@@ -10,6 +10,7 @@
   import DeathAnswerModal from "../components/DeathAnswerModal.svelte";
   import WinnerModal from "../components/WinnerModal.svelte";
   import Button from "./Button.svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   let timerComponent;
   let timeLeft = $state(3);
@@ -141,8 +142,8 @@
     <button
       onclick={restart}
       class="flex items-center bg-neutral-300 hover:bg-neutral-200 hover:border-neutral-400 active:bg-neutral-300 active:border-black duration-200 border-2 border-black rounded-full px-2 py-1 poppins font-semibold"
-      >RESTART
-    </button>
+      >{m.restart()}</button
+    >
   </div>
   <div
     class="flex flex-col gap-2 mx-3 sm:mx-5 my-5 mt-10 lg:[grid-area:inputs;]"
@@ -152,7 +153,7 @@
         <p
           class="transition-all duration-200 transform -translate-y-1/2 pointer-events-none text-black rounded-md px-2 top-0 left-4 bg-yellow-300 border-2 border-black z-[9] absolute md:text-xl"
         >
-          aeg
+          {m.time()}
         </p>
         <Timer
           bind:this={timerComponent}
@@ -167,7 +168,7 @@
         <p
           class="transition-all duration-200 transform -translate-y-1/2 pointer-events-none text-black rounded-md px-2 top-0 left-4 lg:left-1/2 lg:right-1/2 lg:w-fit bg-yellow-300 border-2 border-black z-[9] absolute md:text-xl lg:-translate-x-1/2"
         >
-          sõna
+          {m.word()}
         </p>
         <input
           type="text"
@@ -182,7 +183,7 @@
         <p
           class="transition-all duration-200 transform -translate-y-1/2 pointer-events-none text-black rounded-md px-2 top-0 left-4 lg:left-auto lg:right-4 bg-yellow-300 border-2 border-black z-[9] absolute md:text-xl"
         >
-          mängija
+          {m.player()}
         </p>
         <input
           type="text"
@@ -199,14 +200,14 @@
     <div class="w-36 md:w-full lg:h-full">
       <Button
         onclick={correctAnswer}
-        text="ÕIGE"
-        class="bg-green-500 font-semibold poppins  px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl"
+        text={m.correct()}
+        class="bg-green-500 font-semibold poppins px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl"
       />
     </div>
     <div class="w-36 md:w-full lg:h-full">
       <Button
         onclick={falseAnswer}
-        text="VALE"
+        text={m.wrong()}
         class="bg-red-500 font-semibold poppins px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl"
       />
     </div>

@@ -1,10 +1,11 @@
 <script>
-  import {slide} from "svelte/transition";
-  import {quintOut} from "svelte/easing";
-  import {gameState} from "$lib/stores";
+  import { slide } from "svelte/transition";
+  import { quintOut } from "svelte/easing";
+  import { gameState } from "$lib/stores";
   import { Play, X } from "lucide-svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
-  let {isOpen, player, word, nextPlayer, close} = $props();
+  let { isOpen, player, word, nextPlayer, close } = $props();
   let exit = $state(false);
 </script>
 
@@ -29,18 +30,19 @@
         <div
           class="bg-red-500 w-10 h-10 flex justify-center items-center border-2 border-black rounded-full absolute top-0 -translate-y-1/2 -left-5 text-xl"
         >
-        <X color="#ffffff"/>
+          <X color="#ffffff" />
         </div>
-        <h2 class="text-center text-2xl font-semibold lg:text-6xl">VALE!</h2>
+        <h2 class="text-center text-2xl font-semibold lg:text-6xl">
+          {m.wrong()}
+        </h2>
       </div>
       <div class="p-4">
         <ul class="list-disc list-inside text-sm sm:text-base lg:text-4xl">
           <li class="mb-2">
-            {player.name} arvas sõna <b>{word}</b>
-            valesti ja langes mängust välja!
+            {m.player_eliminated({ name: player.name, word })}
           </li>
           <li class="mb-2">
-            Järgmine mängija on <b>{nextPlayer}</b>!
+            {m.next_player({ player: nextPlayer })}
           </li>
         </ul>
       </div>
@@ -57,7 +59,7 @@
             }, 1200);
           }}
           class="bg-yellow-300 font-semibold poppins px-4 py-2 rounded-lg border-2 border-black disabled:opacity-50 lg:text-4xl flex items-center gap-1"
-          >MÄNGI <Play /></button
+          >{m.play()} <Play /></button
         >
       </div>
     </div>

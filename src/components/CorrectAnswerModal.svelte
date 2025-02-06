@@ -1,6 +1,7 @@
 <script>
   import {gameState} from "$lib/stores";
   import { Check, Play } from "lucide-svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   let {isOpen, player, word, nextPlayer, close} = $props();
   let exit = $state(false);
@@ -45,9 +46,10 @@
             }, 1200);
           }}
           class="bg-yellow-300 hover:bg-yellow-200 font-semibold poppins px-4 py-2 rounded-lg border-2 border-black lg:text-4xl flex items-center gap-1"
-          >MÄNGI <Play /></button
+          >{m.play()} <Play /></button
         >
       </div>
     </div>
+
   </div>
 {/if}
