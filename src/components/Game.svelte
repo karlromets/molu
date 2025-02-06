@@ -9,6 +9,7 @@
   import FalseAnswerModal from "../components/FalseAnswerModal.svelte";
   import DeathAnswerModal from "../components/DeathAnswerModal.svelte";
   import WinnerModal from "../components/WinnerModal.svelte";
+  import Button from "./Button.svelte";
 
   let timerComponent;
   let timeLeft = $state(3);
@@ -56,10 +57,10 @@
   function handleAnswer(isFalseAnswer) {
     if (isFalseAnswer) {
       timerComponent.stopTimer();
-      console.debug(`Current turn player index: ${$gameState.players.currentTurn}`);
-      let currentPlayerLives = removeLife(
-        $gameState.players.currentTurn
+      console.debug(
+        `Current turn player index: ${$gameState.players.currentTurn}`
       );
+      let currentPlayerLives = removeLife($gameState.players.currentTurn);
       if (currentPlayerLives === 0) {
         let deadPlayer =
           $gameState.players.active[$gameState.players.currentTurn];
@@ -106,7 +107,9 @@
     console.debug(`Removing life for player at index: ${index}`);
     $gameState.players.active[index].lives--;
     const remainingLives = $gameState.players.active[index].lives;
-    console.debug(`Player at index ${index} now has ${remainingLives} lives remaining.`);
+    console.debug(
+      `Player at index ${index} now has ${remainingLives} lives remaining.`
+    );
     return remainingLives;
   }
 
@@ -191,18 +194,22 @@
     </label>
   </div>
   <div
-    class="flex md:flex-col lg:flex-row gap-2 justify-between items-center mx-3 sm:mx-5 mb-5 md:mt-10 lg:mt-5 lg:[grid-area:buttons] lg:h-full"
+    class="flex md:flex-col lg:flex-row gap-8 justify-between items-center mx-3 sm:mx-5 mb-5 md:mt-10 lg:mt-5 lg:[grid-area:buttons] lg:h-full"
   >
-    <button
-      onclick={correctAnswer}
-      class="bg-green-500 hover:bg-green-400 hover:border-green-700 duration-200 border-2 border-black rounded-lg w-36 md:w-full lg:h-full px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl font-semibold poppins"
-      >ÕIGE</button
-    >
-    <button
-      onclick={falseAnswer}
-      class="bg-red-500 hover:bg-red-400 hover:border-red-700 duration-200 border-2 border-black rounded-lg w-36 md:w-full lg:h-full px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl font-semibold poppins"
-      >VALE</button
-    >
+    <div class="w-36 md:w-full lg:h-full">
+      <Button
+        onclick={correctAnswer}
+        text="ÕIGE"
+        class="bg-green-500 font-semibold poppins  px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl"
+      />
+    </div>
+    <div class="w-36 md:w-full lg:h-full">
+      <Button
+        onclick={falseAnswer}
+        text="VALE"
+        class="bg-red-500 font-semibold poppins px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl"
+      />
+    </div>
   </div>
 
   <div
