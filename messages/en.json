@@ -14,5 +14,20 @@
   "game_flow_steps_6": "Then the game moves on to the next player who starts guessing.",
   "tips": "TIPS",
   "tips_list_1": "Spectators should try to give clear and precise hints to help the player guess the word or phrase correctly.",
-  "tips_list_2": "Players should try to listen carefully to the given hints and use good thinking to make their guesses."
+  "tips_list_2": "Players should try to listen carefully to the given hints and use good thinking to make their guesses.",
+  "settings": "GAME SETTINGS",
+  "player_list": "Player List",
+  "add": "ADD",
+  "player_exists": "A player with this name already exists!",
+  "guess_time": "Guess Time",
+  "lives": "Lives",
+  "punishments": "Punishments",
+  "punishment_input": "Punishment",
+  "probability": "Probability",
+  "add_probability": "Please add a probability!",
+  "add_punishment": "Please add a punishment!",
+  "punishment_exists": "This punishment already exists!",
+  "min_players": "At least two players are needed to start",
+  "probability_sum": "Punishment probabilities must add up to 100%",
+  "start": "START"
 }

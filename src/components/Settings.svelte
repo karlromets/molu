@@ -1,9 +1,10 @@
 <script>
-  import {gameState, updateSettingsPlayers} from "$lib/stores";
-  import {onMount} from "svelte";
+  import { gameState, updateSettingsPlayers } from "$lib/stores";
+  import { onMount } from "svelte";
   import logopadding from "../assets/logopadding.png";
-  import {toast} from "@zerodevx/svelte-toast";
+  import { toast } from "@zerodevx/svelte-toast";
   import { Clock, Heart, Play, Settings, X } from "lucide-svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   onMount(() => {
     const settingsString = localStorage.getItem("settings");
@@ -21,7 +22,7 @@
     const hasPunishmentsChosen = $gameState.settings.punishmentsChoice;
 
     if (!hasEnoughPlayers) {
-      toast.push("Vähemalt kaks mängijat peab olema, et alustada");
+      toast.push(m.min_players());
       return;
     }
 
@@ -32,7 +33,7 @@
         0
       );
       if (totalProbability !== 100) {
-        toast.push("Karistuste tõenäosused peavad kokku liitma 100%");
+        toast.push(m.probability_sum());
         return;
       }
     }
@@ -69,16 +70,20 @@
     <div
       class="bg-yellow-300 border-2 border-black rounded-full px-6 py-3 mx-2 w-fit"
     >
-      <h1 class="text-2xl sm:text-3xl font-semibold text-black flex items-center gap-1">
-        MÄNGU SÄTTED <Settings class="w-6 h-6 sm:w-7 sm:h-7"/>
+      <h1
+        class="text-2xl sm:text-3xl font-semibold text-black flex items-center gap-1"
+      >
+        {m.settings()}
+        <Settings class="w-6 h-6 sm:w-7 sm:h-7" />
       </h1>
     </div>
   </section>
+
   <section class="w-full mt-2">
     <div class="bg-yellow-300 border-2 border-black rounded-lg mx-2">
       <div class="border-black border-b-2">
         <div class="flex justify-between items-center p-2 overflow-auto">
-          <h1 class="font-semibold mr-2">Mängijate nimekiri</h1>
+          <h1 class="font-semibold mr-2">{m.player_list()}</h1>
           <div class="flex">
             <input
               bind:value={newPlayerName}
@@ -97,14 +102,14 @@
                     newPlayerName = ""; // Clear input after adding player
                     saveLS();
                   } else {
-                    toast.push("Sellise nimega mängija on juba olemas!");
+                    toast.push(m.player_exists());
                   }
                 } else {
                   newPlayerName = "";
                 }
               }}
               class="bg-yellow-300 border-2 rounded-tl-none rounded-bl-none border-black rounded-lg poppins font-semibold text-xl px-2 sm:px-4 py-2 hover:bg-yellow-100 duration-200 active:bg-yellow-300"
-              >LISA</button
+              >{m.add()}</button
             >
           </div>
         </div>
@@ -117,14 +122,16 @@
             <span>{playerName}</span>
             <button
               onclick={() => {
-                $gameState.settings.players = $gameState.settings.players.filter(
-                  (player) => player !== playerName
-                );
+                $gameState.settings.players =
+                  $gameState.settings.players.filter(
+                    (player) => player !== playerName
+                  );
                 saveLS();
               }}
               aria-label="Save Settings"
               class="hover:cursor-pointer hover:rotate-90 active:scale-50 duration-200"
-              ><!-- <i class="fa-solid fa-xmark text-2xl mb-[0.125rem]"></i> --><X /></button
+              ><!-- <i class="fa-solid fa-xmark text-2xl mb-[0.125rem]"></i> --><X
+              /></button
             >
           </li>
         {/each}
@@ -136,10 +143,14 @@
     <div class="bg-yellow-300 border-2 border-black rounded-lg mx-2 p-2">
       <div class="flex justify-between items-center">
         <h1 class="font-semibold text-xl flex items-center gap-1">
-          Arvamise aeg <Clock />
+          {m.guess_time()}
+          <Clock />
         </h1>
-        <span class="poppins font-semibold text-xl">{$gameState.settings.time}s</span>
+        <span class="poppins font-semibold text-xl"
+          >{$gameState.settings.time}s</span
+        >
       </div>
+
       <div class="">
         <input
           type="range"
@@ -157,11 +168,15 @@
     </div>
     <div class="bg-yellow-300 border-2 border-black rounded-lg mx-2 mt-2 p-2">
       <div class="flex justify-between items-center">
-        <h1 class="font-semibold text-xl  flex items-center gap-1">
-          Elud <Heart color="#dc2626" class="fill-[#dc2626]"/>
+        <h1 class="font-semibold text-xl flex items-center gap-1">
+          {m.lives()}
+          <Heart color="#dc2626" class="fill-[#dc2626]" />
         </h1>
-        <span class="poppins font-semibold text-xl">{$gameState.settings.lives}</span>
+        <span class="poppins font-semibold text-xl"
+          >{$gameState.settings.lives}</span
+        >
       </div>
+
       <div class="">
         <input
           type="range"
@@ -201,7 +216,8 @@
         ></div>
         <span
           class={"ms-3 text-xl font-semibold duration-200 " +
-            ($gameState.settings.punishmentsChoice ? "" : "opacity-50")}>Karistused</span
+            ($gameState.settings.punishmentsChoice ? "" : "opacity-50")}
+          >{m.punishments()}</span
         >
       </label>
       <div class="flex flex-col gap-2">
@@ -213,11 +229,12 @@
             <input
               bind:value={punishmentName}
               type="text"
-              placeholder="Karistus"
+              placeholder={m.punishment_input()}
               maxlength="20"
               required
               class="border-2 border-black rounded-lg pl-2 focus:outline-none w-full h-10"
             />
+
             <div class="flex">
               <input
                 bind:value={punishmentProbability}
@@ -225,7 +242,7 @@
                 min="1"
                 max="100"
                 required
-                placeholder="Tõenäosus"
+                placeholder={m.probability()}
                 class="border-2 border-r-0 rounded-tr-none rounded-br-none border-black rounded-lg pl-2 focus:outline-none w-full"
               />
               <button
@@ -233,10 +250,10 @@
                   event.preventDefault();
 
                   if (!punishmentProbability) {
-                    toast.push("Lisa tõenäosus ka ikka!");
+                    toast.push(m.add_probability());
                     return;
                   } else if (!punishmentName) {
-                    toast.push("Lisa karistus ka ikka!");
+                    toast.push(m.add_punishment());
                     return;
                   }
 
@@ -258,13 +275,13 @@
                     punishmentName = "";
                     punishmentProbability = "";
                   } else {
-                    toast.push("Selline karistus on juba olemas!");
+                    toast.push(m.punishment_exists());
                     return;
                   }
                 }}
                 type="submit"
                 class="bg-yellow-300 border-2 rounded-tl-none rounded-bl-none border-black rounded-lg poppins font-semibold text-xl px-4 py-2 hover:bg-yellow-100 duration-200 active:bg-yellow-300 h-10 flex items-center justify-center"
-                >LISA</button
+                >{m.add()}</button
               >
             </div>
           </form>
@@ -281,7 +298,8 @@
                   <input
                     value={punishment.probability}
                     oninput={(e) => {
-                      $gameState.settings.punishments.probability = e.target.value;
+                      $gameState.settings.punishments.probability =
+                        e.target.value;
                     }}
                     onchange={saveLS}
                     type="number"
@@ -290,14 +308,15 @@
                   />
                   <button
                     onclick={() => {
-                      $gameState.settings.punishments = $gameState.settings.punishments.filter(
-                        (p) => p.punishment !== punishment.punishment
-                      );
+                      $gameState.settings.punishments =
+                        $gameState.settings.punishments.filter(
+                          (p) => p.punishment !== punishment.punishment
+                        );
                       saveLS();
                     }}
                     aria-label="Save Settings"
                     class="bg-yellow-300 border-2 rounded-tl-none rounded-bl-none border-black rounded-lg poppins font-semibold hover:bg-yellow-100 duration-200 active:bg-yellow-300 w-12"
-                    ><X/></button
+                    ><X /></button
                   >
                 </div>
               </li>
@@ -315,7 +334,8 @@
       }}
       class="text-2xl sm:text-3xl font-semibold text-black text-center cursor-pointer bg-yellow-300 border-black border-2 rounded-full px-6 py-3 hover:bg-yellow-200 active:translate-y-1 duration-200 flex items-center gap-1"
     >
-      START <Play class="w-6 h-6 sm:w-7 sm:h-7"/>
+      {m.start()}
+      <Play class="w-6 h-6 sm:w-7 sm:h-7" />
     </button>
   </section>
 </div>

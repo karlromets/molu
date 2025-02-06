@@ -14,5 +14,20 @@
   "game_flow_steps_6": "Seejärel liigub mäng edasi järgmisele mängijale, kes hakkab arvama.",
   "tips": "NÄPUNÄITED",
   "tips_list_1": "Pealtvaatajad peaksid püüdma anda selgeid ja täpseid vihjeid, et aidata mängijal sõna või väljendit õigesti ära arvata.",
-  "tips_list_2": "Mängijad peaksid püüdma tähelepanelikult kuulata antud vihjeid ja kasutama head mõtlemist, et oma arvamisi teha."
+  "tips_list_2": "Mängijad peaksid püüdma tähelepanelikult kuulata antud vihjeid ja kasutama head mõtlemist, et oma arvamisi teha.",
+  "settings": "MÄNGU SÄTTED",
+  "player_list": "Mängijate nimekiri",
+  "add": "LISA",
+  "player_exists": "Sellise nimega mängija on juba olemas!",
+  "guess_time": "Arvamise aeg",
+  "lives": "Elud",
+  "punishments": "Karistused",
+  "punishment_input": "Karistus",
+  "probability": "Tõenäosus",
+  "add_probability": "Lisa tõenäosus ka ikka!",
+  "add_punishment": "Lisa karistus ka ikka!",
+  "punishment_exists": "Selline karistus on juba olemas!",
+  "min_players": "Vähemalt kaks mängijat peab olema, et alustada",
+  "probability_sum": "Karistuste tõenäosused peavad kokku liitma 100%",
+  "start": "ALUSTA"
 }
