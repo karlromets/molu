@@ -1,0 +1,18 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "hello_world": "Tere {name}!",
+  "play": "MÄNGI",
+  "instructions": "JUHEND",
+  "goal": "EESMÄRK",
+  "goal_description": "Mängijad arvavad kordamööda sõnu või väljendeid pealtvaatajate antud vihjete põhjal, ilma et nad kasutaksid tegelikku sõna või väljendit.",
+  "game_flow": "MÄNGU KÄIK",
+  "game_flow_steps_1": "Mängu alustamiseks valige mängija. Nad seisavad ekraani ees, seljaga ekraani poole.",
+  "game_flow_steps_2": "Ekraanile ilmub sõna või väljend, mida vaatajad näevad.",
+  "game_flow_steps_3": "Pealtvaatajad annavad mängijale kordamööda vihjeid ekraanil oleva sõna või väljendi kohta, ilma et nad kasutaksid tegelikku sõna või väljendit.",
+  "game_flow_steps_4": "Mängija peab sõna või väljendi ära arvama ekraanil näidatud aja jooksul.",
+  "game_flow_steps_5": "Kui mängija arvab õigesti, vajutab moderaator nuppu \"õige\". Kui mängija arvab valesti, vajutab moderaator nuppu \"vale\".",
+  "game_flow_steps_6": "Seejärel liigub mäng edasi järgmisele mängijale, kes hakkab arvama.",
+  "tips": "NÄPUNÄITED",
+  "tips_list_1": "Pealtvaatajad peaksid püüdma anda selgeid ja täpseid vihjeid, et aidata mängijal sõna või väljendit õigesti ära arvata.",
+  "tips_list_2": "Mängijad peaksid püüdma tähelepanelikult kuulata antud vihjeid ja kasutama head mõtlemist, et oma arvamisi teha."
+}

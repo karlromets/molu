@@ -1,6 +1,13 @@
 <script>
-  import { ArrowDown, ArrowUp, BookOpen, Crosshair, Lightbulb } from "lucide-svelte";
-import logo from "../assets/logo.svg";
+  import {
+    ArrowDown,
+    ArrowUp,
+    BookOpen,
+    Crosshair,
+    Lightbulb,
+  } from "lucide-svelte";
+  import logo from "../assets/logo.svg";
+  import * as m from "$lib/paraglide/messages.js";
 
   let y = $state(0);
   let innerWidth = $state(0);
@@ -38,14 +45,16 @@ import logo from "../assets/logo.svg";
       <a
         href="/game"
         class="border-4 border-solid border-black rounded-full bg-yellow-300 hover:scale-125 active:scale-100 duration-200 font-semibold poppins text-3xl sm:text-4xl md:text-5xl lg:text-6xl px-6 py-3 w-full text-center"
-        >MÄNGI</a
+        >{m.play()}</a
       >
       <a
         href="#juhend"
         class="border-4 border-solid border-black rounded-full bg-neutral-300 hover:scale-125 active:rotate-12 duration-200 font-semibold poppins text-3xl sm:text-4xl md:text-5xl lg:text-6xl px-6 py-3 w-full flex items-center gap-1"
-        >JUHEND <ArrowDown class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14"  color="#000000"/>
-        </a
-      >
+        >JUHEND <ArrowDown
+          class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14"
+          color="#000000"
+        />
+      </a>
     </div>
   </section>
   <section

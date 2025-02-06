@@ -1,0 +1,18 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "hello_world": "Hello {name}!",
+  "play": "PLAY",
+  "instructions": "INSTRUCTIONS",
+  "goal": "GOAL",
+  "goal_description": "Players take turns guessing words or phrases based on hints given by spectators, without using the actual word or phrase.",
+  "game_flow": "GAME FLOW",
+  "game_flow_steps_1": "To start the game, choose a player. They stand in front of the screen, with their back to it.",
+  "game_flow_steps_2": "A word or phrase appears on the screen that the viewers can see.",
+  "game_flow_steps_3": "Spectators take turns giving hints about the word or phrase on the screen without using the actual word or phrase.",
+  "game_flow_steps_4": "The player must guess the word or phrase within the time shown on screen.",
+  "game_flow_steps_5": "If the player guesses correctly, the moderator presses the \"correct\" button. If the player guesses incorrectly, the moderator presses the \"wrong\" button.",
+  "game_flow_steps_6": "Then the game moves on to the next player who starts guessing.",
+  "tips": "TIPS",
+  "tips_list_1": "Spectators should try to give clear and precise hints to help the player guess the word or phrase correctly.",
+  "tips_list_2": "Players should try to listen carefully to the given hints and use good thinking to make their guesses."
+}
