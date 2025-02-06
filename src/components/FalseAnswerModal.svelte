@@ -8,8 +8,10 @@
   import { modals } from "svelte-modals";
   import { Check, Play, Shell } from "lucide-svelte";
   import * as m from "$lib/paraglide/messages.js";
+  import { languageTag } from "$lib/paraglide/runtime.js";
 
   let { isOpen, player, word, nextPlayer, close } = $props();
+
 
   let tod = $state("");
   let todType = $state("");
@@ -50,10 +52,12 @@
 
       tod = tods[newIndex];
       if (tod.type === "T") {
-        todType = "TÕDE: ";
+        todType = `${m.truth()}: `;
       } else {
-        todType = "TEGU: ";
+        todType = `${m.dare()}: `;
       }
+
+
       loading = false;
     }, 1000);
   }
@@ -182,10 +186,11 @@
             </li>
             <hr class="my-2 mt-4 border-black" />
             {#if tod}
-              <span class="lg:text-4xl"><b>{todType}</b>{tod.et}</span>
+              <span class="lg:text-4xl"><b>{todType}</b>{tod[languageTag()]}</span>
             {/if}
             <fieldset class="flex gap-6 lg:text-4xl">
               <div>
+
                 <input
                   class="scale-[2]"
                   bind:group={selectedOption}
