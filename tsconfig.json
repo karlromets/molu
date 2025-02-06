@@ -2,12 +2,9 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Svelte",
   "_version": "5.0.0",
+  "extends": "./.svelte-kit/tsconfig.json",
 
   "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "$lib/*": ["src/lib/*"]
-    },
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ES2023",
@@ -22,7 +19,7 @@
        */
     "sourceMap": true,
     /**   
-        Set isolatedModules to true so that each file is looked at in isolation. TypeScript has a few features which require cross-file analysis and compilation, which the Svelte compiler and tooling like Vite don’t do. 
+        Set isolatedModules to true so that each file is looked at in isolation. TypeScript has a few features which require cross-file analysis and compilation, which the Svelte compiler and tooling like Vite don't do. 
     */
     "isolatedModules": true,
     "strict": true,
