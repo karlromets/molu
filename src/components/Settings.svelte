@@ -74,7 +74,6 @@
       </h1>
     </div>
   </section>
-
   <section class="w-full mt-2">
     <div class="bg-yellow-300 border-2 border-black rounded-lg mx-2">
       <div class="border-black border-b-2">
@@ -280,7 +279,10 @@
                 </div>
                 <div class="flex">
                   <input
-                    bind:value={punishment.probability}
+                    value={punishment.probability}
+                    oninput={(e) => {
+                      $gameState.settings.punishments.probability = e.target.value;
+                    }}
                     onchange={saveLS}
                     type="number"
                     placeholder="%"
