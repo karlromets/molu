@@ -1,10 +1,10 @@
 <script>
-  import {slide} from "svelte/transition";
-  import {quintOut} from "svelte/easing";
-  import {gameState} from "$lib/stores";
+  import { slide } from "svelte/transition";
+  import { quintOut } from "svelte/easing";
+  import { gameState } from "$lib/stores";
   import { House, Medal } from "lucide-svelte";
 
-  let {isOpen} = $props();
+  let { isOpen } = $props();
   let exit = $state(false);
 </script>
 
@@ -27,9 +27,11 @@
         <div
           class="bg-yellow-300 w-10 h-10 flex justify-center items-center border-2 border-black rounded-full absolute top-0 -translate-y-1/2 -left-5 text-xl"
         >
-        <Medal color="000000"/>
+          <Medal color="#000000" />
         </div>
-        <h2 class="text-center text-2xl font-semibold lg:text-6xl">ÕNNITLUSED!</h2>
+        <h2 class="text-center text-2xl font-semibold lg:text-6xl">
+          ÕNNITLUSED!
+        </h2>
         <h2 class="text-center text-xl lg:text-4xl">
           {$gameState.players.active[0].name} on võitnud!
         </h2>
@@ -42,7 +44,6 @@
               exit = false;
               close();
               $gameState.phase = "settings";
-              
             }, 2500);
           }}
           aria-label="Back to Start"
