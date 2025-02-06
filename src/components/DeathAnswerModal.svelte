@@ -56,7 +56,7 @@
               $gameState.state = "countdown";
             }, 1200);
           }}
-          class="bg-yellow-300 font-semibold poppins px-4 py-2 rounded-lg border-2 border-black disabled:opacity-50 lg:text-4xl"
+          class="bg-yellow-300 font-semibold poppins px-4 py-2 rounded-lg border-2 border-black disabled:opacity-50 lg:text-4xl flex items-center gap-1"
           >MÄNGI <Play /></button
         >
       </div>
