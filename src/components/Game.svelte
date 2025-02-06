@@ -2,7 +2,7 @@
   import { gameState, updateGameState } from "$lib/stores";
   import PlayerCard from "../components/PlayerCard.svelte";
   import Timer from "../components/Timer.svelte";
-  import { words } from "../assets/words.js";
+  import { languageTag } from "$lib/paraglide/runtime.js";
   import logo from "../assets/logo.svg";
   import { modals } from "svelte-modals";
   import CorrectAnswerModal from "../components/CorrectAnswerModal.svelte";
@@ -16,7 +16,20 @@
   let timeLeft = $state(3);
   let previousState = "";
 
-  let word = $state(words[Math.floor(Math.random() * words.length)]);
+  let words = $state([]);
+  let word = $state("");
+
+  async function loadWords() {
+    const wordsModule = await import(`../assets/words.${languageTag()}.js`);
+    words = wordsModule.words;
+    word = words[Math.floor(Math.random() * words.length)];
+  }
+
+  loadWords();
+
+  $effect(() => {
+    loadWords();
+  });
 
   $effect(() => {
     console.debug($gameState.state);
