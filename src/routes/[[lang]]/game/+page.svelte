@@ -1,6 +1,6 @@
-<script>
-  import Settings from "../../components/Settings.svelte";
-  import Game from "../../components/Game.svelte";
+<script lang="ts">
+  import Settings from "$components/Settings.svelte";
+  import Game from "$components/Game.svelte";
   import { gameState } from "$lib/stores";
 
   $effect(() => {

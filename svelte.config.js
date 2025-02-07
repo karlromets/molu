@@ -4,6 +4,11 @@ import {vitePreprocess} from "@sveltejs/vite-plugin-svelte";
 const config = {
   kit: {
     adapter: adapter(),
+    alias: {
+			$paraglide: './src/paraglide',
+      $components: './src/components',
+      $src: './src/',
+		}
   },
   preprocess: vitePreprocess(),
 };

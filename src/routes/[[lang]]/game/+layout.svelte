@@ -1,5 +1,5 @@
 <script>
-    import "../../app.css";
+    import "../../../app.css";
     import {Modals} from "svelte-modals";
     import {gameState} from "$lib/stores"; 
 
