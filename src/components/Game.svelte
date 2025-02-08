@@ -170,9 +170,6 @@
         </p>
         <Timer
           bind:this={timerComponent}
-          timesup={() => {
-            falseAnswer();
-          }}
         />
       </div>
     </label>

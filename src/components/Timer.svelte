@@ -46,7 +46,6 @@
       if (remaining <= 0) {
         console.debug("Time is up. Stopping timer and triggering timesup.");
         stopTimer();
-        timesup();
       }
 
       countFrom = remaining;
