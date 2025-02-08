@@ -12,7 +12,6 @@
 
   let { isOpen, player, word, nextPlayer, close } = $props();
 
-
   let tod = $state("");
   let todType = $state("");
   let selectedOption = $state("");
@@ -20,7 +19,7 @@
   let exit = $state(false);
   let lastPlayer = $gameState.players.active[player].name;
   let punishment = $derived(
-    $gameState.settings.punishmentsChoice ? generatePunishment() : ""
+    $gameState.settings.punishmentsChoice ? generatePunishment() : "",
   );
 
   function generateTOD() {
@@ -56,7 +55,6 @@
       } else {
         todType = `${m.dare()}: `;
       }
-
 
       loading = false;
     }, 1000);
@@ -134,94 +132,62 @@
             <span class="lg:text-4xl"
               ><b>{m.punishment()}:</b> {punishment}</span
             >
-            <fieldset class="flex gap-6 lg:text-4xl">
-              <div>
-                <input
-                  class="scale-[2]"
-                  bind:group={selectedOption}
-                  type="radio"
-                  value="declineToDo"
-                  name="DidHeToIt"
-                />
-                <label for="declineToDo"
-                  >{m.not_done()}
-                  <span class="inline-flex justify-center items-center"
-                    >(-1
-                    <img
-                      src={heart}
-                      class="h-3 w-3 sm:w-4 sm:h-4"
-                      alt="Heart"
-                    />)</span
-                  ></label
-                >
-              </div>
-              <div>
-                <input
-                  class="scale-[2]"
-                  bind:group={selectedOption}
-                  type="radio"
-                  name="DidHeToIt"
-                  value="agreeToDo"
-                />
-                <label for="declineToDo">{m.done()}</label>
-              </div>
-            </fieldset>
-          {:else}
-            <li class="mb-2 lg:text-4xl">
-              {m.next_player_truth_or_dare({ nextPlayer, lastPlayer })}
-            </li>
-            <li class="lg:text-4xl">
-              {m.generate_hint_prefix({ nextPlayer })}
-              <button
-                onclick={generateTOD}
-                class="bg-amber-500 hover:bg-amber-300 active:bg-amber-500 border-2 border-black rounded-md font-medium px-2 inline-flex items-center gap-2"
-                >{m.generate()}
-                <div
-                  class={"flex items-center justify-center " +
-                    (loading ? "animate-twSpin" : "hidden")}
-                >
-                  <Shell />
-                </div>
-              </button>
-            </li>
-            <hr class="my-2 mt-4 border-black" />
-            {#if tod}
-              <span class="lg:text-4xl"><b>{todType}</b>{tod[languageTag()]}</span>
-            {/if}
-            <fieldset class="flex gap-6 lg:text-4xl">
-              <div>
-
-                <input
-                  class="scale-[2]"
-                  bind:group={selectedOption}
-                  type="radio"
-                  value="declineToDo"
-                  name="DidHeToIt"
-                />
-                <label for="declineToDo"
-                  >{m.not_done()}
-                  <span class="inline-flex justify-center items-center"
-                    >(-1
-                    <img
-                      src={heart}
-                      class="h-3 w-3 sm:w-4 sm:h-4"
-                      alt="Heart"
-                    />)</span
-                  ></label
-                >
-              </div>
-              <div>
-                <input
-                  class="scale-[2]"
-                  bind:group={selectedOption}
-                  type="radio"
-                  name="DidHeToIt"
-                  value="agreeToDo"
-                />
-                <label for="declineToDo">{m.done()}</label>
-              </div>
-            </fieldset>
           {/if}
+
+          <li class="mb-2 lg:text-4xl">
+            {m.next_player_truth_or_dare({ nextPlayer, lastPlayer })}
+          </li>
+          <li class="lg:text-4xl">
+            {m.generate_hint_prefix({ nextPlayer })}
+            <button
+              onclick={generateTOD}
+              class="bg-amber-500 hover:bg-amber-300 active:bg-amber-500 border-2 border-black rounded-md font-medium px-2 inline-flex items-center gap-2"
+              >{m.generate()}
+              <div
+                class={"flex items-center justify-center " +
+                  (loading ? "animate-twSpin" : "hidden")}
+              >
+                <Shell />
+              </div>
+            </button>
+          </li>
+          <hr class="my-2 mt-4 border-black" />
+          {#if tod}
+            <span class="lg:text-4xl"><b>{todType}</b>{tod[languageTag()]}</span
+            >
+          {/if}
+          <fieldset class="flex gap-6 lg:text-4xl">
+            <div>
+              <input
+                class="scale-[2]"
+                bind:group={selectedOption}
+                type="radio"
+                value="declineToDo"
+                name="DidHeToIt"
+              />
+              <label for="declineToDo"
+                >{m.not_done()}
+                <span class="inline-flex justify-center items-center"
+                  >(-1
+                  <img
+                    src={heart}
+                    class="h-3 w-3 sm:w-4 sm:h-4"
+                    alt="Heart"
+                  />)</span
+                ></label
+              >
+            </div>
+            <div>
+              <input
+                class="scale-[2]"
+                bind:group={selectedOption}
+                type="radio"
+                name="DidHeToIt"
+                value="agreeToDo"
+              />
+              <label for="declineToDo">{m.done()}</label>
+            </div>
+          </fieldset>
         </ul>
 
         <span class="mt-4"></span>
