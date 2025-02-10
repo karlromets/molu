@@ -49,5 +49,6 @@
   "correct": "ÕIGE",
   "restart": "RESTART",
   "press_this": "Vajuta siia",
-  "player_input": "Nimi"
+  "player_input": "Nimi",
+  "back_to_start": "Tagasi algusesse"
 }

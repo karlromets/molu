@@ -47,7 +47,7 @@
               $gameState.phase = "settings";
             }, 2500);
           }}
-          aria-label="Back to Start"
+          aria-label={m.back_to_start()}
           class="bg-yellow-300 font-semibold poppins px-4 py-2 rounded-lg border-2 border-black disabled:opacity-50 hover:bg-yellow-200 lg:text-4xl"
           ><House /></button
         >

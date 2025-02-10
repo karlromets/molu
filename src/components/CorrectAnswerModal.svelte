@@ -23,14 +23,14 @@
         >
         <Check color="#ffffff" />
         </div>
-        <h2 class="text-center text-2xl lg:text-6xl font-semibold">ÕIGE!</h2>
+        <h2 class="text-center text-2xl lg:text-6xl font-semibold">{m.correct()}</h2>
       </div>
       <div class="p-4">
         <ul class="list-disc list-inside text-sm sm:text-base lg:text-4xl">
           <li>
-            {$gameState.players.active[player].name} arvas sõna <b>{word}</b> õigesti!
+            {$gameState.players.active[player].name} {m.player_eliminated({ name: $gameState.players.active[player].name, word })}
           </li>
-          <li>Järgmine mängija on <b>{nextPlayer}</b>!</li>
+          <li>{m.next_player({ player: nextPlayer })}</li>
         </ul>
       </div>
       <div

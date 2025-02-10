@@ -49,5 +49,6 @@
   "correct": "CORRECT",
   "restart": "RESTART",
   "press_this": "Press this",
-  "player_input": "Name"
+  "player_input": "Name",
+  "back_to_start": "Back to Start"
 }
