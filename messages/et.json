@@ -48,5 +48,6 @@
   "player": "mängija",
   "correct": "ÕIGE",
   "restart": "RESTART",
-  "press_this": "Vajuta siia"
+  "press_this": "Vajuta siia",
+  "player_input": "Nimi"
 }

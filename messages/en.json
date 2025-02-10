@@ -48,5 +48,6 @@
   "player": "player",
   "correct": "CORRECT",
   "restart": "RESTART",
-  "press_this": "Press this"
+  "press_this": "Press this",
+  "player_input": "Name"
 }

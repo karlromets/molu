@@ -88,10 +88,11 @@
             <input
               bind:value={newPlayerName}
               type="text"
-              placeholder="Nimi"
+              placeholder={m.player_input()}
               class="border-2 border-r-0 rounded-tr-none rounded-br-none border-black rounded-lg pl-2 focus:outline-none w-full"
             />
             <button
+
               onclick={() => {
                 if (newPlayerName.trim() !== "") {
                   let duplicate = $gameState.settings.players.some(
