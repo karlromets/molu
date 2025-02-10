@@ -19,6 +19,7 @@
   let words = $state([]);
   let word = $state("");
   let isProcessing = $state(false);
+  let isProcessing = $state(false);
 
   async function loadWords() {
     const wordsModule = await import(`../assets/words.${languageTag()}.js`);
@@ -62,10 +63,12 @@
 
   function correctAnswer() {
     if (isProcessing) return;
+    if (isProcessing) return;
     handleAnswer(false);
   }
 
   function falseAnswer() {
+    if (isProcessing) return;
     if (isProcessing) return;
     handleAnswer(true);
   }
@@ -96,6 +99,26 @@
         }
       }
 
+      let lastPlayer = $gameState.players.currentTurn;
+      moveToNextPlayer();
+
+      if (isFalseAnswer) {
+        await modals.open(FalseAnswerModal, {
+          player: lastPlayer,
+          word: word,
+          nextPlayer:
+            $gameState.players.active[$gameState.players.currentTurn].name,
+        });
+      } else {
+        await modals.open(CorrectAnswerModal, {
+          player: lastPlayer,
+          word: word,
+          nextPlayer:
+            $gameState.players.active[$gameState.players.currentTurn].name,
+        });
+      }
+    } finally {
+      isProcessing = false;
       let lastPlayer = $gameState.players.currentTurn;
       moveToNextPlayer();
 
