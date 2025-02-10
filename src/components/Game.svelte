@@ -18,6 +18,7 @@
 
   let words = $state([]);
   let word = $state("");
+  let isProcessing = $state(false);
 
   async function loadWords() {
     const wordsModule = await import(`../assets/words.${languageTag()}.js`);
@@ -61,54 +62,64 @@
   }
 
   function correctAnswer() {
+    if (isProcessing) return;
     handleAnswer(false);
   }
 
   function falseAnswer() {
+    if (isProcessing) return;
     handleAnswer(true);
   }
 
-  function handleAnswer(isFalseAnswer) {
-    if (isFalseAnswer) {
-      timerComponent.stopTimer();
-      console.debug(
-        `Current turn player index: ${$gameState.players.currentTurn}`
-      );
-      let currentPlayerLives = removeLife($gameState.players.currentTurn);
-      if (currentPlayerLives === 0) {
-        let deadPlayer =
-          $gameState.players.active[$gameState.players.currentTurn];
-        eliminatePlayer();
-        if ($gameState.players.active.length === 1) {
-          modals.open(WinnerModal, {});
+  async function handleAnswer(isFalseAnswer) {
+    if (isProcessing) return;
+    isProcessing = true;
+
+    try {
+      if (isFalseAnswer) {
+        timerComponent.stopTimer();
+        console.debug(
+          `Current turn player index: ${$gameState.players.currentTurn}`,
+        );
+        let currentPlayerLives = removeLife($gameState.players.currentTurn);
+        if (currentPlayerLives === 0) {
+          let deadPlayer =
+            $gameState.players.active[$gameState.players.currentTurn];
+          eliminatePlayer();
+          if ($gameState.players.active.length === 1) {
+            await modals.open(WinnerModal, {});
+            return;
+          }
+          await modals.open(DeathAnswerModal, {
+            player: deadPlayer,
+            word: word,
+            nextPlayer:
+              $gameState.players.active[$gameState.players.currentTurn].name,
+          });
           return;
         }
-        modals.open(DeathAnswerModal, {
-          player: deadPlayer,
+      }
+
+      let lastPlayer = $gameState.players.currentTurn;
+      moveToNextPlayer();
+
+      if (isFalseAnswer) {
+        await modals.open(FalseAnswerModal, {
+          player: lastPlayer,
           word: word,
           nextPlayer:
             $gameState.players.active[$gameState.players.currentTurn].name,
         });
-        return;
+      } else {
+        await modals.open(CorrectAnswerModal, {
+          player: lastPlayer,
+          word: word,
+          nextPlayer:
+            $gameState.players.active[$gameState.players.currentTurn].name,
+        });
       }
-    }
-
-    let lastPlayer = $gameState.players.currentTurn;
-    moveToNextPlayer();
-    if (isFalseAnswer) {
-      modals.open(FalseAnswerModal, {
-        player: lastPlayer,
-        word: word,
-        nextPlayer:
-          $gameState.players.active[$gameState.players.currentTurn].name,
-      });
-    } else {
-      modals.open(CorrectAnswerModal, {
-        player: lastPlayer,
-        word: word,
-        nextPlayer:
-          $gameState.players.active[$gameState.players.currentTurn].name,
-      });
+    } finally {
+      isProcessing = false;
     }
   }
 
@@ -122,7 +133,7 @@
     $gameState.players.active[index].lives--;
     const remainingLives = $gameState.players.active[index].lives;
     console.debug(
-      `Player at index ${index} now has ${remainingLives} lives remaining.`
+      `Player at index ${index} now has ${remainingLives} lives remaining.`,
     );
     return remainingLives;
   }
@@ -130,7 +141,7 @@
   function eliminatePlayer() {
     const playerToRemove = $gameState.players.active.splice(
       $gameState.players.currentTurn,
-      1
+      1,
     )[0];
     $gameState.players.dead.push(playerToRemove);
 
@@ -168,9 +179,7 @@
         >
           {m.time()}
         </p>
-        <Timer
-          bind:this={timerComponent}
-        />
+        <Timer bind:this={timerComponent} />
       </div>
     </label>
     <label class="relative w-full">
@@ -212,6 +221,7 @@
         onclick={correctAnswer}
         text={m.correct()}
         class="bg-green-500 font-semibold poppins px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl"
+        disabled={isProcessing}
       />
     </div>
     <div class="w-36 md:w-full lg:h-full">
@@ -219,6 +229,7 @@
         onclick={falseAnswer}
         text={m.wrong()}
         class="bg-red-500 font-semibold poppins px-4 py-2 md:px-8 md:py-4 text-2xl md:text-5xl"
+        disabled={isProcessing}
       />
     </div>
   </div>
