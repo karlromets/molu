@@ -24,16 +24,21 @@ test.describe("Home Page", () => {
     await instructionsButton.click();
     const instructionsSection = page.locator("#juhend");
     await expect(instructionsSection).toBeVisible();
+    await expect(instructionsSection).toBeInViewport();
   });
 
   test.describe("Localization", () => {
-    test("should display Estonian translations", async ({ page }) => {
+    test.beforeEach(async ({ page }) => {
       await page.goto("/et");
+    });
 
+    test("should display Estonian translations", async ({ page }) => {
       const playButton = page.getByRole("link", { name: "MÄNGI" });
       const instructionsButton = page.getByRole("link", { name: "JUHEND" });
 
+      await expect(playButton).toBeVisible();
       await expect(playButton).toHaveText("MÄNGI");
+      await expect(instructionsButton).toBeVisible();
       await expect(instructionsButton).toHaveText("JUHEND");
     });
 
