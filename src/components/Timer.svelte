@@ -8,43 +8,32 @@
 
   // Reset function
   export function resetTimer() {
-    console.debug("resetTimer called. Resetting timer.");
     stopTimer(); // Clear any existing interval first
     countFrom = $gameState.settings.time;
-    console.debug(`Timer reset to ${countFrom} seconds.`);
     startTimer();
   }
 
   // Stop function
   export function stopTimer() {
-    console.debug("stopTimer called. Stopping timer.");
     if (timerInterval) {
       clearInterval(timerInterval);
-      console.debug("Existing timer interval cleared.");
       timerInterval = null;
     }
     countFrom = 0;
-    console.debug("countFrom set to 0.");
   }
 
   function startTimer() {
-    console.debug("startTimer called. Starting timer.");
     if (timerInterval) {
-      console.debug("Timer already running. Exiting startTimer.");
       return; // Prevent multiple intervals
     }
 
     const startTime = Date.now();
     const endTime = startTime + countFrom * 1000;
-    console.debug(
-      `Timer started. Start Time: ${startTime}, End Time: ${endTime}`
-    );
 
     timerInterval = setInterval(() => {
       const remaining = Math.max(Math.round((endTime - Date.now()) / 1000), 0);
 
       if (remaining <= 0) {
-        console.debug("Time is up. Stopping timer and triggering timesup.");
         stopTimer();
       }
 
@@ -53,7 +42,6 @@
   }
 
   onDestroy(() => {
-    console.debug("Component is being destroyed. Cleaning up timer.");
     stopTimer();
   });
 
