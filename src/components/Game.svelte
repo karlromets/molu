@@ -19,7 +19,6 @@
   let words = $state([]);
   let word = $state("");
   let isProcessing = $state(false);
-  let isProcessing = $state(false);
 
   async function loadWords() {
     const wordsModule = await import(`../assets/words.${languageTag()}.js`);
@@ -137,8 +136,6 @@
             $gameState.players.active[$gameState.players.currentTurn].name,
         });
       }
-    } finally {
-      isProcessing = false;
     }
   }
 
