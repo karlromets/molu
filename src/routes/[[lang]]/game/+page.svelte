@@ -3,9 +3,6 @@
   import Game from "$components/Game.svelte";
   import { gameState } from "$lib/stores";
 
-  $effect(() => {
-    console.log($gameState);
-  });
 </script>
 
 <main

@@ -33,7 +33,6 @@
   });
 
   $effect(() => {
-    console.debug($gameState.state);
     if ($gameState.state === previousState) {
       return;
     } else {
@@ -78,9 +77,6 @@
     try {
       if (isFalseAnswer) {
         timerComponent.stopTimer();
-        console.debug(
-          `Current turn player index: ${$gameState.players.currentTurn}`,
-        );
         let currentPlayerLives = removeLife($gameState.players.currentTurn);
         if (currentPlayerLives === 0) {
           let deadPlayer =
@@ -129,12 +125,8 @@
   }
 
   function removeLife(index) {
-    console.debug(`Removing life for player at index: ${index}`);
     $gameState.players.active[index].lives--;
     const remainingLives = $gameState.players.active[index].lives;
-    console.debug(
-      `Player at index ${index} now has ${remainingLives} lives remaining.`,
-    );
     return remainingLives;
   }
 
